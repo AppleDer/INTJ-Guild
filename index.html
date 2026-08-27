@@ -346,7 +346,7 @@
     </main>
 
     <script>
-        // ลิงก์ Google Apps Script[cite: 7]
+        // ลิงก์ Google Apps Script
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMC52Pw1DXfp8hUVVArVo3I2-ID5TnKYcEcVQjNPCRHOx5mPONZDIvkYgd6vCKXZxg/exec";
 
         const form = document.getElementById('registerForm');
@@ -944,8 +944,8 @@
             submitBtn.disabled = true;
             submitBtn.innerText = `กำลังบันทึกข้อมูล...`;
 
-            // กำหนด Squad Group ID เฉพาะกิจสำหรับการลงทะเบียนกลุ่มนี้ร่วมกัน
-            const squadGroupId = currentMode === 'party' && cards.length > 1 ? 'squad_' + Date.now() : null;
+            // กำหนด Squad Group ID สำหรับการลงทะเบียนกลุ่มนี้ร่วมกันเพื่อให้ระบบจัดอยู่ปาร์ตี้เดียวกัน
+            const squadGroupId = currentMode === 'party' && cards.length > 0 ? 'squad_' + Date.now() : null;
 
             for (const [idx, card] of cards.entries()) {
                 let timeSlotValue = groupTimeSlot;
@@ -1024,9 +1024,8 @@
             }
 
             let parties = [];
-            let currentParty = { id: 1, members: [] };
 
-            // 1. จัดกลุ่มสมาชิกที่มาด้วยกัน (Squad Group ID) ให้อยู่ปาร์ตี้เดียวกันก่อน
+            // 1. จัดกลุ่มสมาชิกที่ลงทะเบียนมาด้วยกัน (Squad Group ID) ให้อยู่ปาร์ตี้เดียวกันก่อนเสมอ
             let squadMap = {};
             let soloMembers = [];
 
@@ -1043,7 +1042,6 @@
 
             // บรรจุสมาชิกกลุ่มลงปาร์ตี้ (หากเกิน 5 คนในกลุ่มเดียว จะตัดแบ่งเป็นปาร์ตี้ถัดไปแต่พยายามจัดสรรร่วมกัน)
             Object.values(squadMap).forEach(groupList => {
-                // ถ้ากลุ่มมีสมาชิกเกิน 5 คน ให้แยกเป็นหลายปาร์ตี้ย่อย
                 for (let i = 0; i < groupList.length; i += 5) {
                     let chunk = groupList.slice(i, i + 5);
                     let targetParty = parties.find(p => p.members.length + chunk.length <= 5);
@@ -1055,7 +1053,7 @@
                 }
             });
 
-            // 2. จัดสรรสมาชิกเดี่ยว (Solo) หรือคนที่เหลือเติมลงปาร์ตี้
+            // 2. จัดสรรสมาชิกเดี่ยว (Solo) หรือคนที่เหลือเติมลงปาร์ตี้ตามบทบาท (Tank/Healer/DPS/Support)
             let healers = [...soloMembers.filter(m => m.role === 'Healer' || m.job === 'Priest')];
             let tanks = [...soloMembers.filter(m => m.role === 'Tank' && !healers.includes(m))];
             let others = [...soloMembers.filter(m => !healers.includes(m) && !tanks.includes(m))];
@@ -1064,7 +1062,6 @@
             tanks.sort(() => Math.random() - 0.5);
             others.sort(() => Math.random() - 0.5);
 
-            // ฟังก์ชันช่วยหาปาร์ตี้ที่ยังไม่เต็ม 5 คน
             function getOrCreateAvailableParty() {
                 let p = parties.find(pt => pt.members.length < 5);
                 if (!p) {
@@ -1089,7 +1086,6 @@
                 p.members.push(others.shift());
             }
 
-            // จัดเรียงลำดับ ID ปาร์ตี้ใหม่ให้ต่อเนื่อง
             parties.forEach((p, idx) => { p.id = idx + 1; });
 
             globalParties = parties;
