@@ -86,7 +86,7 @@
             <div class="flex items-center gap-3">
                 <button id="adminAuthBtn" onclick="toggleAdminMode()" class="bg-slate-800/80 hover:bg-slate-800 text-cyan-400 border border-cyan-500/30 px-3.5 py-1.5 rounded-full text-xs font-accent flex items-center gap-1.5 transition">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                    <span id="adminAuthText">เข้าสู่ระบบเจ้าของเว็บ (Admin)</span>
+                    <span id="adminAuthText">เข้าสู่ระบบ Admin (ปลดล็อกปาร์ตี้)</span>
                 </button>
                 
                 <div id="adminButtonsGroup" class="hidden flex items-center gap-2">
@@ -233,14 +233,14 @@
                 </button>
             </div>
 
-            <!-- Tab Content 1: Party Management View (Hidden for normal users, visible for Admin) -->
+            <!-- Tab Content 1: Party Management View (เฉพาะส่วนนี้ที่จะซ่อน และแสดงเฉพาะ Admin) -->
             <div id="viewPartyTab" class="space-y-4">
                 <div id="adminProtectedPartySection" class="glass-panel p-5 rounded-3xl border border-emerald-500/20 shadow-2xl space-y-4">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-white/5 pb-3">
                         <div>
                             <h3 class="font-accent text-sm font-bold text-emerald-400 flex items-center gap-2">
                                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                                รายชื่อปาร์ตี้ (Party Rosters) [เฉพาะ Admin]
+                                รายชื่อปาร์ตี้ (Party Rosters)
                             </h3>
                             <p class="text-xs text-slate-300 mt-0.5">กลุ่มที่ลงทะเบียนด้วยกันจะถูกจัดให้อยู่ปาร์ตี้เดียวกันเสมอในทุกกิจกรรม</p>
                         </div>
@@ -250,7 +250,7 @@
                             </button>
                             <button id="autoBalanceBtn" onclick="handleRebalanceClick()" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-accent font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-1.5 shadow-lg shadow-emerald-500/10 transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                                จัดทีมใหม่ (Re-Balance) <span id="adminLockIcon" class="text-[10px] bg-slate-950/40 px-1.5 py-0.5 rounded text-slate-950 font-bold">🔒 Admin Only</span>
+                                จัดทีมใหม่ (Re-Balance)
                             </button>
                         </div>
                     </div>
@@ -264,11 +264,11 @@
                     </div>
                 </div>
 
-                <!-- ข้อความแสดงเมื่อไม่ใช่ Admin -->
+                <!-- ข้อความแสดงเมื่อไม่ใช่ Admin (แสดงเฉพาะส่วนปาร์ตี้) -->
                 <div id="guestPartyRestrictedMsg" class="glass-panel p-8 rounded-3xl border border-white/5 text-center space-y-3 hidden">
                     <div class="w-12 h-12 mx-auto rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 text-lg">🔒</div>
-                    <h3 class="font-accent font-bold text-sm text-white">จำกัดสิทธิ์การมองเห็นรายชื่อปาร์ตี้</h3>
-                    <p class="text-xs text-slate-400 max-w-md mx-auto">ส่วนรายชื่อปาร์ตี้ทั้งหมดและระบบจัดทีมใหม่ถูกซ่อนไว้ สามารถดูได้เฉพาะผู้ดูแลระบบ (Admin) เท่านั้น กรุณาเข้าสู่ระบบ Admin ที่มุมขวาบน</p>
+                    <h3 class="font-accent font-bold text-sm text-white">รายชื่อปาร์ตี้ถูกซ่อนไว้</h3>
+                    <p class="text-xs text-slate-400 max-w-md mx-auto">ส่วนรายชื่อปาร์ตี้ทั้งหมดและปุ่มจัดทีมใหม่จะแสดงเฉพาะผู้ดูแลระบบ (Admin) เท่านั้น กดปุ่ม <span class="text-cyan-400 font-semibold">"เข้าสู่ระบบ Admin"</span> ที่ด้านบนขวาเพื่อดู</p>
                 </div>
             </div>
 
@@ -293,7 +293,7 @@
                 </div>
             </div>
 
-            <!-- Table Roster -->
+            <!-- Table Roster (ไม่ถูกซ่อน แสดงปกติสำหรับทุกคน) -->
             <div class="glass-panel rounded-3xl overflow-hidden shadow-2xl">
                 <!-- Sticky Table Top Header Controls -->
                 <div class="p-4 border-b border-white/5 flex flex-col lg:flex-row justify-between items-center gap-3 bg-slate-900/80 backdrop-blur-md sticky top-16 z-30">
@@ -353,7 +353,6 @@
     </main>
 
     <script>
-        // ลิงก์ Google Apps Script
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMC52Pw1DXfp8hUVVArVo3I2-ID5TnKYcEcVQjNPCRHOx5mPONZDIvkYgd6vCKXZxg/exec";
 
         const form = document.getElementById('registerForm');
@@ -370,7 +369,6 @@
         const autoBalanceBtn = document.getElementById('autoBalanceBtn');
         const adminAuthBtn = document.getElementById('adminAuthBtn');
         const adminAuthText = document.getElementById('adminAuthText');
-        const adminLockIcon = document.getElementById('adminLockIcon');
         const adminButtonsGroup = document.getElementById('adminButtonsGroup');
         const partyGrid = document.getElementById('partyGrid');
         const adminProtectedPartySection = document.getElementById('adminProtectedPartySection');
@@ -417,10 +415,10 @@
             }, 3500);
         }
 
-        // ฟังก์ชันควบคุมการแสดงผลตามสิทธิ์ Admin
+        // ควบคุมเฉพาะการแสดงผลส่วนรายชื่อปาร์ตี้
         function toggleAdminMode() {
             if (!isAdminLoggedIn) {
-                const pwd = prompt("กรุณากรอกรหัสผ่าน Admin:");
+                const pwd = prompt("กรุณากรอกรหัสผ่าน Admin เพื่อดูรายชื่อปาร์ตี้:");
                 if (pwd === ADMIN_PASSWORD) {
                     isAdminLoggedIn = true;
                     adminAuthText.textContent = "ออกจากระบบ Admin";
@@ -432,7 +430,7 @@
                 }
             } else {
                 isAdminLoggedIn = false;
-                adminAuthText.textContent = "เข้าสู่ระบบเจ้าของเว็บ (Admin)";
+                adminAuthText.textContent = "เข้าสู่ระบบ Admin (ปลดล็อกปาร์ตี้)";
                 adminAuthBtn.className = "bg-slate-800/80 hover:bg-slate-800 text-cyan-400 border border-cyan-500/30 px-3.5 py-1.5 rounded-full text-xs font-accent flex items-center gap-1.5 transition";
                 adminButtonsGroup.classList.add('hidden');
                 showToast("ออกจากระบบ Admin แล้ว", "info");
@@ -450,7 +448,6 @@
             }
         }
 
-        // เรียกใช้งานเพื่อตั้งค่าเริ่มต้น (ซ่อนปาร์ตี้ไว้สำหรับคนทั่วไป)
         window.addEventListener('DOMContentLoaded', () => {
             updateAdminUIVisibility();
         });
