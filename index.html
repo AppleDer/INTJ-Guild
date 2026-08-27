@@ -944,7 +944,7 @@
             submitBtn.disabled = true;
             submitBtn.innerText = `กำลังบันทึกข้อมูล...`;
 
-            // กำหนด Squad Group ID สำหรับการลงทะเบียนกลุ่มนี้ร่วมกันเพื่อให้ระบบจัดอยู่ปาร์ตี้เดียวกัน
+            // กำหนด Squad Group ID สำหรับการลงทะเบียนกลุ่มร่วมกัน เพื่อให้ระบบจัดให้อยู่ปาร์ตี้เดียวกันเสมอ
             const squadGroupId = currentMode === 'party' && cards.length > 0 ? 'squad_' + Date.now() : null;
 
             for (const [idx, card] of cards.entries()) {
@@ -1025,7 +1025,7 @@
 
             let parties = [];
 
-            // 1. จัดกลุ่มสมาชิกที่ลงทะเบียนมาด้วยกัน (Squad Group ID) ให้อยู่ปาร์ตี้เดียวกันก่อนเสมอ
+            // 1. จัดกลุ่มสมาชิกที่ลงทะเบียนมาด้วยกัน (Squad Group ID) ให้อยู่ปาร์ตี้เดียวกันก่อนเสมอ (Strict Squad Lock)
             let squadMap = {};
             let soloMembers = [];
 
@@ -1040,7 +1040,7 @@
                 }
             });
 
-            // บรรจุสมาชิกกลุ่มลงปาร์ตี้ (หากเกิน 5 คนในกลุ่มเดียว จะตัดแบ่งเป็นปาร์ตี้ถัดไปแต่พยายามจัดสรรร่วมกัน)
+            // บรรจุสมาชิกกลุ่มลงปาร์ตี้ (หากเกิน 5 คนในกลุ่มเดียว จะตัดแบ่งเป็นปาร์ตี้ถัดไป)
             Object.values(squadMap).forEach(groupList => {
                 for (let i = 0; i < groupList.length; i += 5) {
                     let chunk = groupList.slice(i, i + 5);
@@ -1053,7 +1053,7 @@
                 }
             });
 
-            // 2. จัดสรรสมาชิกเดี่ยว (Solo) หรือคนที่เหลือเติมลงปาร์ตี้ตามบทบาท (Tank/Healer/DPS/Support)
+            // 2. จัดสรรสมาชิกเดี่ยว (Solo) หรือคนที่เหลือเติมลงปาร์ตี้ตามบทบาท
             let healers = [...soloMembers.filter(m => m.role === 'Healer' || m.job === 'Priest')];
             let tanks = [...soloMembers.filter(m => m.role === 'Tank' && !healers.includes(m))];
             let others = [...soloMembers.filter(m => !healers.includes(m) && !tanks.includes(m))];
