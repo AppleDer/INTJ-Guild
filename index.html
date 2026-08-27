@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INTJ GUILD - Modern Registration & Auto Party</title>
+    <title>INTJ GUILD - Member Registration HQ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -18,30 +18,11 @@
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .glass-panel-interactive {
-            background: rgba(17, 24, 39, 0.7);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .glass-panel-interactive:hover {
-            border-color: rgba(56, 189, 248, 0.3);
-            box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.15);
-        }
         .text-glow {
             text-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
         }
         #toastContainer {
             transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-        .skeleton {
-            background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.05) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
         }
     </style>
 </head>
@@ -79,24 +60,17 @@
                         <h1 class="font-accent text-xl font-extrabold text-white text-glow">INTJ GUILD</h1>
                         <span class="text-xs font-accent font-semibold px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">Ragnarok HQ</span>
                     </div>
-                    <p class="text-xs text-slate-300 mt-0.5">ระบบลงทะเบียนสมาชิก & จัดปาร์ตี้อัตโนมัติ (Google Sheets Connected)</p>
+                    <p class="text-xs text-slate-300 mt-0.5">ระบบลงทะเบียนสมาชิกกิลด์ (Google Sheets Connected)</p>
                 </div>
             </div>
 
-            <div class="flex items-center gap-3">
-                <button id="adminAuthBtn" onclick="toggleAdminMode()" class="bg-slate-800/80 hover:bg-slate-800 text-cyan-400 border border-cyan-500/30 px-3.5 py-1.5 rounded-full text-xs font-accent flex items-center gap-1.5 transition">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                    <span id="adminAuthText">เข้าสู่ระบบเจ้าของเว็บ (Admin)</span>
+            <div class="flex items-center gap-2">
+                <button onclick="loadMock137Members()" class="bg-indigo-600/80 hover:bg-indigo-600 text-white border border-indigo-400/30 px-3.5 py-1.5 rounded-full text-xs font-accent flex items-center gap-1.5 transition shadow-lg">
+                    📥 โหลดข้อมูลจำลอง
                 </button>
-                
-                <div id="adminButtonsGroup" class="hidden flex items-center gap-2">
-                    <button onclick="loadMock137Members()" class="bg-indigo-600 hover:bg-indigo-500 text-white border border-indigo-400/40 px-3 py-1.5 rounded-full text-xs font-accent flex items-center gap-1.5 transition shadow-lg">
-                        📥 โหลด 137 คน
-                    </button>
-                    <button onclick="clearAllMembers()" class="bg-rose-600/80 hover:bg-rose-600 text-white border border-rose-400/40 px-3 py-1.5 rounded-full text-xs font-accent flex items-center gap-1.5 transition shadow-lg">
-                        🗑️ ลบทั้งหมด
-                    </button>
-                </div>
+                <button onclick="clearAllMembers()" class="bg-rose-600/80 hover:bg-rose-600 text-white border border-rose-400/30 px-3.5 py-1.5 rounded-full text-xs font-accent flex items-center gap-1.5 transition shadow-lg">
+                    🗑️ ลบทั้งหมด
+                </button>
             </div>
         </div>
     </header>
@@ -195,9 +169,10 @@
             </form>
         </section>
 
-        <!-- Content Right -->
+        <!-- Content Right (Table Only) -->
         <section class="lg:col-span-7 space-y-5">
             
+            <!-- Summary Header Card -->
             <div class="glass-panel p-5 rounded-3xl shadow-2xl flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div class="flex items-center gap-3.5">
                     <span class="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
@@ -205,15 +180,14 @@
                     </span>
                     <div>
                         <h2 class="font-accent text-base font-bold text-white flex items-center gap-2 flex-wrap">
-                            สมาชิกกิลด์ (Roster)
-                            <span class="text-xs bg-indigo-500/20 text-indigo-300 font-accent px-2.5 py-0.5 rounded-full border border-indigo-500/30">สมาชิก: <span id="memberCount">0</span> คน</span>
-                            <span class="text-xs bg-emerald-500/20 text-emerald-300 font-accent px-2.5 py-0.5 rounded-full border border-emerald-500/30">ปาร์ตี้: <span id="totalPartyCount">0</span> ทีม (<span id="incompletePartyCount" class="text-amber-300">ยังไม่ครบ 5: 0 ทีม</span>)</span>
+                            รายชื่อสมาชิกกิลด์ (Guild Roster)
+                            <span class="text-xs bg-indigo-500/20 text-indigo-300 font-accent px-2.5 py-0.5 rounded-full border border-indigo-500/30">สมาชิกทั้งหมด: <span id="memberCount">0</span> คน</span>
                         </h2>
-                        <p class="text-xs text-slate-300 mt-0.5">รายชื่อสมาชิกที่ลงทะเบียนทั้งหมดและการจัดสรรทีม</p>
+                        <p class="text-xs text-slate-300 mt-0.5">รายชื่อตัวละครทั้งหมดที่ลงทะเบียนเข้าร่วมกิจกรรมกิลด์</p>
                     </div>
                 </div>
                 
-                <div class="flex flex-wrap items-center gap-2">
+                <div class="flex items-center gap-2">
                     <button id="refreshBtn" onclick="loadMembersFromSheet()" class="bg-slate-800/80 hover:bg-slate-800 text-slate-300 border border-white/10 px-3 py-2.5 rounded-xl text-xs flex items-center gap-1.5 transition">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                         รีเฟรชข้อมูล
@@ -221,113 +195,43 @@
                 </div>
             </div>
 
-            <!-- Tab Navigation -->
-            <div class="grid grid-cols-2 gap-2 p-1.5 bg-slate-950/80 rounded-2xl border border-white/5">
-                <button type="button" id="tabPartyBtn" onclick="switchMainTab('party')" class="py-3 px-4 rounded-xl text-xs sm:text-sm font-accent font-bold transition-all flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 shadow-md">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                    รายชื่อปาร์ตี้และสมาชิก
-                </button>
-                <button type="button" id="tabActivityBtn" onclick="switchMainTab('activity')" class="py-3 px-4 rounded-xl text-xs sm:text-sm font-accent font-bold transition-all flex items-center justify-center gap-2 text-slate-400 hover:text-white">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                    รายชื่อปาร์ตี้ร่วมกิจกรรม
-                </button>
-            </div>
-
-            <!-- Tab Content 1: Party Management View -->
-            <div id="viewPartyTab" class="space-y-4">
-                <div class="glass-panel p-5 rounded-3xl border border-emerald-500/20 shadow-2xl space-y-4">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-white/5 pb-3">
-                        <div>
-                            <h3 class="font-accent text-sm font-bold text-emerald-400 flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                                รายชื่อปาร์ตี้ (Party Rosters)
-                            </h3>
-                            <p class="text-xs text-slate-300 mt-0.5">กลุ่มที่ลงทะเบียนด้วยกันจะถูกจัดให้อยู่ปาร์ตี้เดียวกันเสมอในทุกกิจกรรม</p>
-                        </div>
-                        <div class="flex items-center gap-2 flex-wrap">
-                            <button onclick="copyAllPartiesText()" class="bg-slate-800/80 hover:bg-slate-800 text-cyan-300 border border-cyan-500/30 px-3.5 py-2.5 rounded-xl text-xs flex items-center gap-1.5 transition">
-                                📋 คัดลอกปาร์ตี้ทั้งหมด
-                            </button>
-                            <button id="autoBalanceBtn" onclick="handleRebalanceClick()" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-accent font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-1.5 shadow-lg shadow-emerald-500/10 transition">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                                จัดทีมใหม่ (Re-Balance) <span id="adminLockIcon" class="text-[10px] bg-slate-950/40 px-1.5 py-0.5 rounded text-slate-950 font-bold">🔒 Admin Only</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="w-full">
-                        <input type="text" id="partySearchInput" onkeyup="filterPartyRoster()" placeholder="🔍 ค้นหาชื่อตัวละครในปาร์ตี้ (เช่น Shadow, Priest)..." class="w-full bg-slate-950/80 border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-400">
-                    </div>
-
-                    <div id="partyGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[520px] overflow-y-auto pr-1">
-                        <!-- Parties populated here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tab Content 2: Activity Summary View -->
-            <div id="viewActivityTab" class="space-y-4 hidden">
-                <div class="glass-panel p-5 rounded-3xl border border-cyan-500/20 shadow-2xl space-y-4">
-                    <div class="border-b border-white/5 pb-3">
-                        <h3 class="font-accent text-sm font-bold text-cyan-400 flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
-                            รายชื่อปาร์ตี้และสมาชิกที่เข้าร่วมกิจกรรม (Activity Party Rosters)
-                        </h3>
-                        <p class="text-xs text-slate-300 mt-0.5">สมาชิกกลุ่มยังคงอยู่ปาร์ตี้เดิม หากใครไม่ลงกิจกรรมจะมีตัวสำรองมาแทนที่ในปาร์ตี้เดิม</p>
-                    </div>
-
-                    <div id="activitySubTabs" class="flex flex-wrap gap-2"></div>
-
-                    <div class="w-full">
-                        <input type="text" id="activitySearchInput" onkeyup="filterActivityRoster()" placeholder="🔍 ค้นหาชื่อตัวละครในกิจกรรมนี้..." class="w-full bg-slate-950/80 border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
-                    </div>
-
-                    <div id="selectedActivityContent" class="pt-2"></div>
-                </div>
-            </div>
-
             <!-- Table Roster -->
             <div class="glass-panel rounded-3xl overflow-hidden shadow-2xl">
-                <!-- Sticky Table Top Header Controls -->
+                <!-- Top Controls -->
                 <div class="p-4 border-b border-white/5 flex flex-col lg:flex-row justify-between items-center gap-3 bg-slate-900/80 backdrop-blur-md sticky top-16 z-30">
-                    <span class="font-accent text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-                        <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
-                        รายชื่อที่ลงทะเบียนทั้งหมด (Operatives)
-                    </span>
+                    <div class="flex items-center gap-2">
+                        <span class="font-accent text-xs font-bold text-slate-300 uppercase tracking-wider">ประเภท:</span>
+                        <div class="flex items-center gap-1 bg-slate-950/80 p-1 rounded-xl border border-white/10 text-xs">
+                            <button onclick="filterByType('All')" id="typeFilterAll" class="px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold transition">ทั้งหมด</button>
+                            <button onclick="filterByType('Solo')" id="typeFilterSolo" class="px-3 py-1 rounded-lg text-slate-300 hover:text-white transition">👤 เดี่ยว</button>
+                            <button onclick="filterByType('Squad')" id="typeFilterSquad" class="px-3 py-1 rounded-lg text-slate-300 hover:text-white transition">👥 กลุ่ม</button>
+                        </div>
+                    </div>
                     
-                    <div class="flex flex-col sm:flex-row flex-wrap items-center gap-2 w-full lg:w-auto">
-                        <!-- Job Filter Dropdown / Buttons -->
-                        <div class="flex items-center gap-1 bg-slate-950/80 p-1 rounded-xl border border-white/10 text-xs overflow-x-auto max-w-full">
-                            <button onclick="filterByJob('All')" class="job-filter-btn px-2.5 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold whitespace-nowrap transition">ทั้งหมด</button>
-                            <button onclick="filterByJob('Knight')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Knight</button>
-                            <button onclick="filterByJob('Paladin')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Paladin</button>
-                            <button onclick="filterByJob('Priest')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Priest</button>
-                            <button onclick="filterByJob('Monk')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Monk</button>
-                            <button onclick="filterByJob('Wizard')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Wizard</button>
-                            <button onclick="filterByJob('Hunter')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Hunter</button>
-                            <button onclick="filterByJob('Assassin')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Assassin</button>
-                        </div>
-                        <div class="w-full sm:w-44">
-                            <input type="text" id="rosterSearchInput" onkeyup="filterRosterTable()" placeholder="🔍 ค้นหาชื่อตัวละคร..." class="w-full bg-slate-950/80 border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
-                        </div>
+                    <div class="w-full sm:w-48">
+                        <input type="text" id="rosterSearchInput" onkeyup="filterRosterTable()" placeholder="🔍 ค้นหาชื่อตัวละคร..." class="w-full bg-slate-950/80 border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
                     </div>
                 </div>
 
-                <!-- Quick Filter Role Chips Bar -->
+                <!-- Job Filter Bar -->
                 <div class="px-4 py-2.5 bg-slate-950/60 border-b border-white/5 flex items-center gap-2 overflow-x-auto text-xs">
-                    <span class="text-slate-400 font-semibold whitespace-nowrap">กรองด่วนตามบทบาท:</span>
-                    <button onclick="filterByRole('All')" role-chip="All" class="role-chip px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 whitespace-nowrap font-medium transition">ทั้งหมด</button>
-                    <button onclick="filterByRole('Tank')" role-chip="Tank" class="role-chip px-2.5 py-1 rounded-lg bg-slate-900 text-slate-300 hover:text-white border border-white/5 whitespace-nowrap font-medium transition">🛡️ Tank</button>
-                    <button onclick="filterByRole('Healer')" role-chip="Healer" class="role-chip px-2.5 py-1 rounded-lg bg-slate-900 text-slate-300 hover:text-white border border-white/5 whitespace-nowrap font-medium transition">💖 Healer</button>
-                    <button onclick="filterByRole('DPS')" role-chip="DPS" class="role-chip px-2.5 py-1 rounded-lg bg-slate-900 text-slate-300 hover:text-white border border-white/5 whitespace-nowrap font-medium transition">⚔️ DPS</button>
-                    <button onclick="filterByRole('Support')" role-chip="Support" class="role-chip px-2.5 py-1 rounded-lg bg-slate-900 text-slate-300 hover:text-white border border-white/5 whitespace-nowrap font-medium transition">✨ Support</button>
+                    <span class="text-slate-400 font-semibold whitespace-nowrap">อาชีพ:</span>
+                    <button onclick="filterByJob('All')" class="job-filter-btn px-2.5 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold whitespace-nowrap transition">ทั้งหมด</button>
+                    <button onclick="filterByJob('Knight')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Knight</button>
+                    <button onclick="filterByJob('Paladin')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Paladin</button>
+                    <button onclick="filterByJob('Priest')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Priest</button>
+                    <button onclick="filterByJob('Monk')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Monk</button>
+                    <button onclick="filterByJob('Wizard')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Wizard</button>
+                    <button onclick="filterByJob('Hunter')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Hunter</button>
+                    <button onclick="filterByJob('Assassin')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Assassin</button>
                 </div>
                 
-                <div class="overflow-x-auto max-h-[500px]">
+                <div class="overflow-x-auto max-h-[600px]">
                     <table class="w-full text-left text-sm text-slate-200 relative" id="memberTable">
                         <thead class="bg-slate-950/90 text-slate-300 uppercase text-xs font-accent border-b border-white/5 sticky top-0 z-20 backdrop-blur-md">
                             <tr>
                                 <th class="p-3.5 font-semibold">ชื่อตัวละคร (IGN)</th>
+                                <th class="p-3.5 font-semibold">ประเภท (Type)</th>
                                 <th class="p-3.5 font-semibold cursor-pointer hover:text-cyan-400 transition select-none" onclick="sortMembersByJob()">
                                     อาชีพ (Job) <span id="sortIcon" class="text-cyan-400">↕</span>
                                 </th>
@@ -346,40 +250,14 @@
     </main>
 
     <script>
-        // ลิงก์ Google Apps Script
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMC52Pw1DXfp8hUVVArVo3I2-ID5TnKYcEcVQjNPCRHOx5mPONZDIvkYgd6vCKXZxg/exec";
-
-        const form = document.getElementById('registerForm');
-        const membersContainer = document.getElementById('membersContainer');
-        const addMemberBtn = document.getElementById('addMemberBtn');
-        const addMemberWrapper = document.getElementById('addMemberWrapper');
-        const groupTimeSlotWrapper = document.getElementById('groupTimeSlotWrapper');
-        const nextMemberNum = document.getElementById('nextMemberNum');
-        const entryCounter = document.getElementById('entryCounter');
-        const memberTableBody = document.getElementById('memberTableBody');
-        const memberCount = document.getElementById('memberCount');
-        const totalPartyCountEl = document.getElementById('totalPartyCount');
-        const incompletePartyCountEl = document.getElementById('incompletePartyCount');
-        const autoBalanceBtn = document.getElementById('autoBalanceBtn');
-        const adminAuthBtn = document.getElementById('adminAuthBtn');
-        const adminAuthText = document.getElementById('adminAuthText');
-        const adminLockIcon = document.getElementById('adminLockIcon');
-        const adminButtonsGroup = document.getElementById('adminButtonsGroup');
-        const partyGrid = document.getElementById('partyGrid');
-        const activitySubTabs = document.getElementById('activitySubTabs');
-        const selectedActivityContent = document.getElementById('selectedActivityContent');
 
         let currentMode = 'solo';
         let memberFormIndex = 0;
         let members = [];
-        let globalParties = [];
         let jobSortAsc = true;
-        let selectedActivityKey = 'Siege War';
         let currentJobFilter = 'All';
-        let currentRoleFilter = 'All';
-
-        let isAdminLoggedIn = false;
-        const ADMIN_PASSWORD = "AppleDer1"; 
+        let currentTypeFilter = 'All';
 
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
@@ -398,967 +276,20 @@
             
             container.appendChild(toast);
             
-            setTimeout(() => {
-                toast.classList.remove('translate-y-2', 'opacity-0');
-            }, 10);
-
+            setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 10);
             setTimeout(() => {
                 toast.classList.add('translate-y-2', 'opacity-0');
                 setTimeout(() => toast.remove(), 300);
             }, 3500);
         }
 
-        function toggleAdminMode() {
-            if (!isAdminLoggedIn) {
-                const pwd = prompt("กรุณากรอกรหัสผ่านเจ้าของเว็บไซต์ (Admin Password):");
-                if (pwd === null) return;
-                if (pwd === ADMIN_PASSWORD) {
-                    isAdminLoggedIn = true;
-                    adminAuthBtn.className = "bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 px-3.5 py-1.5 rounded-full text-xs font-accent flex items-center gap-1.5 transition";
-                    adminAuthText.innerText = "สถานะ: เจ้าของเว็บ (Admin Active)";
-                    adminLockIcon.innerText = "🔓 ปลดล็อคแล้ว";
-                    adminLockIcon.className = "text-[10px] bg-emerald-500/20 px-1.5 py-0.5 rounded text-emerald-300 font-bold";
-                    
-                    adminButtonsGroup.classList.remove('hidden');
-
-                    showToast("เข้าสู่ระบบเจ้าของเว็บสำเร็จ!", "success");
-                    runAutoBalance();
-                } else {
-                    showToast("รหัสผ่านไม่ถูกต้อง!", "error");
-                }
-            } else {
-                if (confirm("คุณต้องการออกจากระบบ Admin หรือไม่?")) {
-                    isAdminLoggedIn = false;
-                    adminAuthBtn.className = "bg-slate-800/80 hover:bg-slate-800 text-cyan-400 border border-cyan-500/30 px-3.5 py-1.5 rounded-full text-xs font-accent flex items-center gap-1.5 transition";
-                    adminAuthText.innerText = "เข้าสู่ระบบเจ้าของเว็บ (Admin)";
-                    adminLockIcon.innerText = "🔒 Admin Only";
-                    adminLockIcon.className = "text-[10px] bg-slate-950/40 px-1.5 py-0.5 rounded text-slate-950 font-bold";
-                    
-                    adminButtonsGroup.classList.add('hidden');
-
-                    showToast("ออกจากระบบ Admin เรียบร้อยแล้ว", "info");
-                    runAutoBalance();
-                }
-            }
+        function filterByType(type) {
+            currentTypeFilter = type;
+            document.getElementById('typeFilterAll').className = type === 'All' ? 'px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold transition' : 'px-3 py-1 rounded-lg text-slate-300 hover:text-white transition';
+            document.getElementById('typeFilterSolo').className = type === 'Solo' ? 'px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold transition' : 'px-3 py-1 rounded-lg text-slate-300 hover:text-white transition';
+            document.getElementById('typeFilterSquad').className = type === 'Squad' ? 'px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold transition' : 'px-3 py-1 rounded-lg text-slate-300 hover:text-white transition';
+            renderTable();
         }
-
-        function handleRebalanceClick() {
-            if (!isAdminLoggedIn) {
-                showToast("เฉพาะ Admin เท่านั้นที่สามารถกดจัดทีมใหม่ได้!", "error");
-                return;
-            }
-            runAutoBalance();
-            showToast("จัดทีมใหม่เรียบร้อยแล้ว!", "success");
-        }
-
-        const activitiesData = [
-            { key: 'Siege War', titleTH: 'Siege War (ชิงปราสาท)', titleEN: 'Sun 21:00 - 22:00', icon: '⚔️', shortName: 'Siege War' },
-            { key: 'Guild League', titleTH: 'Guild League (สนามแข่งขัน)', titleEN: 'Tue 21:30-22:25 / Thu 22:00-22:25', icon: '🛡️', shortName: 'Guild League' },
-            { key: 'Polarity Zone', titleTH: 'Polarity Zone: บอสธรรมดา 1-4', titleEN: 'Sun 17:00 - 17:30 (Regular Bosses 1-4)', icon: '👹', shortName: 'Polarity บอสธรรมดา 1-4' },
-            { key: 'Polarity Zone Star', titleTH: 'Polarity Zone: บอสระดับดาว', titleEN: 'Sun 17:00 - 17:30 (Star Level Bosses)', icon: '⭐', shortName: 'Polarity บอสระดับดาว' },
-            { key: 'Mirror World', titleTH: 'Mirror World', titleEN: 'Thu 21:00 - 21:15', icon: '🌀', shortName: 'Mirror World' }
-        ];
-
-        function generateTimeOptions() {
-            let options = '';
-            for (let i = 0; i < 24; i++) {
-                const timeStr = `${i.toString().padStart(2, '0')}:00`;
-                options += `<option value="${timeStr}">${timeStr} น.</option>`;
-            }
-            return options;
-        }
-
-        const timeOptionsHTML = generateTimeOptions();
-        document.getElementById('groupStartTime').innerHTML += timeOptionsHTML;
-        document.getElementById('groupEndTime').innerHTML += timeOptionsHTML;
-
-        async function loadMembersFromSheet() {
-            showSkeletonTable();
-            try {
-                const response = await fetch(SCRIPT_URL);
-                const result = await response.json();
-                let rawData = [];
-                if (result && Array.isArray(result)) {
-                    rawData = result;
-                } else if (result && result.data && Array.isArray(result.data)) {
-                    rawData = result.data;
-                }
-                
-                members = rawData.map(m => ({
-                    ign: m.ign || 'Unknown',
-                    job: m.job || 'Other',
-                    role: m.role || 'DPS',
-                    level: Number(m.level) || 1,
-                    timeSlot: m.timeSlot || 'ตลอดทั้งวัน (All Day)',
-                    activities: Array.isArray(m.activities) ? m.activities : ['Siege War'],
-                    squadGroupId: m.squadGroupId || null
-                }));
-
-                showToast("โหลดข้อมูลสำเร็จ!", "success");
-            } catch(e) {
-                console.error(e);
-                const saved = localStorage.getItem('intj_guild_members');
-                let rawSaved = saved ? JSON.parse(saved) : [];
-                members = rawSaved.map(m => ({
-                    ign: m.ign || 'Unknown',
-                    job: m.job || 'Other',
-                    role: m.role || 'DPS',
-                    level: Number(m.level) || 1,
-                    timeSlot: m.timeSlot || 'ตลอดทั้งวัน (All Day)',
-                    activities: Array.isArray(m.activities) ? m.activities : ['Siege War'],
-                    squadGroupId: m.squadGroupId || null
-                }));
-                showToast("โหลดจากหน่วยความจำสำรอง (Offline Mode)", "info");
-            }
-            updateUI();
-        }
-
-        function showSkeletonTable() {
-            memberTableBody.innerHTML = '';
-            for (let i = 0; i < 5; i++) {
-                const tr = document.createElement('tr');
-                tr.className = 'border-b border-white/5';
-                tr.innerHTML = `
-                    <td class="p-3.5"><div class="h-4 w-28 rounded skeleton"></div></td>
-                    <td class="p-3.5"><div class="h-4 w-20 rounded skeleton"></div></td>
-                    <td class="p-3.5"><div class="h-5 w-16 rounded-full skeleton"></div></td>
-                    <td class="p-3.5 text-center"><div class="h-4 w-10 mx-auto rounded skeleton"></div></td>
-                    <td class="p-3.5 text-center"><div class="h-4 w-20 mx-auto rounded skeleton"></div></td>
-                    <td class="p-3.5"><div class="h-4 w-32 rounded skeleton"></div></td>
-                    <td class="p-3.5 text-center"><div class="h-6 w-12 mx-auto rounded skeleton"></div></td>
-                `;
-                memberTableBody.appendChild(tr);
-            }
-        }
-
-        async function saveMembersToSheet() {
-            try {
-                await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(members)
-                });
-            } catch(e) {
-                console.error(e);
-            }
-            localStorage.setItem('intj_guild_members', JSON.stringify(members));
-        }
-
-        function loadMock137Members() {
-            if (!isAdminLoggedIn) return;
-            const jobs = ['Knight', 'Paladin', 'Priest', 'Monk', 'Wizard', 'Sage', 'Hunter', 'Bard/Dancer', 'Assassin', 'Rogue', 'Blacksmith', 'Alchemist', 'Gunslinger', 'Druid'];
-            const roles = {
-                'Knight': 'Tank', 'Paladin': 'Tank', 'Priest': 'Healer', 'Monk': 'DPS',
-                'Wizard': 'DPS', 'Sage': 'Support', 'Hunter': 'DPS', 'Bard/Dancer': 'Support',
-                'Assassin': 'DPS', 'Rogue': 'DPS', 'Blacksmith': 'Support', 'Alchemist': 'Support',
-                'Gunslinger': 'DPS', 'Druid': 'Healer'
-            };
-            const activitiesList = [
-                ['Siege War', 'Guild League', 'Polarity Zone', 'Polarity Zone Star', 'Mirror World'],
-                ['Siege War', 'Guild League'],
-                ['Siege War', 'Polarity Zone', 'Mirror World'],
-                ['Guild League', 'Polarity Zone Star']
-            ];
-
-            let mockMembers = [];
-            for (let i = 1; i <= 137; i++) {
-                const randomJob = jobs[Math.floor(Math.random() * jobs.length)];
-                const randomRole = roles[randomJob] || 'DPS';
-                const randomLevel = Math.floor(Math.random() * 15) + 80;
-                const randomAct = activitiesList[Math.floor(Math.random() * activitiesList.length)];
-
-                mockMembers.push({
-                    ign: `GuildMember_${i < 10 ? '00' + i : i < 100 ? '0' + i : i}`,
-                    job: randomJob,
-                    role: randomRole,
-                    level: randomLevel,
-                    timeSlot: 'ตลอดทั้งวัน (All Day)',
-                    activities: randomAct,
-                    squadGroupId: null
-                });
-            }
-
-            members = mockMembers;
-            saveMembersToSheet();
-            updateUI();
-            showToast("สร้างรายชื่อทดสอบ 137 คนสำเร็จ!", "success");
-        }
-
-        function clearAllMembers() {
-            if (!isAdminLoggedIn) return;
-            if (!confirm("⚠️ คุณแน่ใจหรือไม่ว่าต้องการลบรายชื่อสมาชิกทั้งหมด?")) return;
-            members = [];
-            saveMembersToSheet();
-            updateUI();
-            showToast("ลบรายชื่อทั้งหมดแล้ว", "success");
-        }
-
-        function switchMode(mode) {
-            currentMode = mode;
-            const modeSoloBtn = document.getElementById('modeSoloBtn');
-            const modePartyBtn = document.getElementById('modePartyBtn');
-
-            if (mode === 'solo') {
-                modeSoloBtn.className = "py-2.5 px-3 rounded-lg text-sm font-accent font-bold transition-all flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 shadow-md";
-                modePartyBtn.className = "py-2.5 px-3 rounded-lg text-sm font-accent font-bold transition-all flex items-center justify-center gap-2 text-slate-400 hover:text-white";
-                groupTimeSlotWrapper.classList.add('hidden');
-                addMemberWrapper.classList.add('hidden');
-            } else {
-                modePartyBtn.className = "py-2.5 px-3 rounded-lg text-sm font-accent font-bold transition-all flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 shadow-md";
-                modeSoloBtn.className = "py-2.5 px-3 rounded-lg text-sm font-accent font-bold transition-all flex items-center justify-center gap-2 text-slate-400 hover:text-white";
-                groupTimeSlotWrapper.classList.remove('hidden');
-                addMemberWrapper.classList.remove('hidden');
-            }
-
-            membersContainer.innerHTML = '';
-            memberFormIndex = 0;
-            addMemberCard();
-        }
-
-        function switchMainTab(tabName) {
-            const tabPartyBtn = document.getElementById('tabPartyBtn');
-            const tabActivityBtn = document.getElementById('tabActivityBtn');
-            const viewPartyTab = document.getElementById('viewPartyTab');
-            const viewActivityTab = document.getElementById('viewActivityTab');
-
-            if (tabName === 'party') {
-                tabPartyBtn.className = "py-3 px-4 rounded-xl text-xs sm:text-sm font-accent font-bold transition-all flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 shadow-md";
-                tabActivityBtn.className = "py-3 px-4 rounded-xl text-xs sm:text-sm font-accent font-bold transition-all flex items-center justify-center gap-2 text-slate-400 hover:text-white";
-                viewPartyTab.classList.remove('hidden');
-                viewActivityTab.classList.add('hidden');
-            } else {
-                tabActivityBtn.className = "py-3 px-4 rounded-xl text-xs sm:text-sm font-accent font-bold transition-all flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 shadow-md";
-                tabPartyBtn.className = "py-3 px-4 rounded-xl text-xs sm:text-sm font-accent font-bold transition-all flex items-center justify-center gap-2 text-slate-400 hover:text-white";
-                viewActivityTab.classList.remove('hidden');
-                viewPartyTab.classList.add('hidden');
-            }
-        }
-
-        function toggleGroupAllDay(checkbox) {
-            const startTime = document.getElementById('groupStartTime');
-            const endTime = document.getElementById('groupEndTime');
-            if (checkbox.checked) {
-                startTime.disabled = true;
-                endTime.disabled = true;
-                startTime.value = '';
-                endTime.value = '';
-            } else {
-                startTime.disabled = false;
-                endTime.disabled = false;
-            }
-        }
-
-        window.toggleSoloAllDay = function(checkbox, index) {
-            const card = membersContainer.querySelector(`[data-index="${index}"]`);
-            const startTime = card.querySelector('.solo-start-time');
-            const endTime = card.querySelector('.solo-end-time');
-            if (checkbox.checked) {
-                startTime.disabled = true;
-                endTime.disabled = true;
-                startTime.value = '';
-                endTime.value = '';
-            } else {
-                startTime.disabled = false;
-                endTime.disabled = false;
-            }
-        };
-
-        function createMemberInputCard(index) {
-            const card = document.createElement('div');
-            card.className = 'glass-panel-interactive p-4 rounded-2xl relative space-y-3 member-card';
-            card.dataset.index = index;
-
-            const isFirst = index === 0;
-
-            card.innerHTML = `
-                <div class="flex justify-between items-center border-b border-white/5 pb-2">
-                    <span class="text-sm font-accent font-bold text-cyan-400 flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
-                        ${currentMode === 'party' ? `คนที่ ${index + 1} (#${index + 1})` : 'ข้อมูล (Details)'} 
-                        ${isFirst && currentMode === 'party' ? '<span class="text-xs text-slate-300 font-normal">(หัวหน้า/Leader)</span>' : ''}
-                    </span>
-                    ${!isFirst && currentMode === 'party' ? `<button type="button" onclick="removeMemberCard(${index})" class="text-xs text-rose-400 hover:text-rose-300 px-2 py-0.5 rounded transition">✕ ลบ</button>` : ''}
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium text-slate-200 uppercase mb-1">ชื่อตัวละคร (IGN)</label>
-                    <input type="text" class="ign-input w-full bg-slate-950/80 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-400" required placeholder="เช่น StrategicMind">
-                </div>
-
-                <div class="grid grid-cols-3 gap-2">
-                    <div>
-                        <label class="block text-xs font-medium text-slate-200 uppercase mb-1">อาชีพ (Job)</label>
-                        <select class="job-input w-full bg-slate-950/80 border border-white/10 rounded-lg px-1.5 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-cyan-400" required>
-                            <option value="">-- เลือก --</option>
-                            <option value="Knight">Knight</option>
-                            <option value="Paladin">Paladin</option>
-                            <option value="Priest">Priest</option>
-                            <option value="Monk">Monk</option>
-                            <option value="Wizard">Wizard</option>
-                            <option value="Sage">Sage</option>
-                            <option value="Hunter">Hunter</option>
-                            <option value="Bard/Dancer">Bard/Dancer</option>
-                            <option value="Assassin">Assassin</option>
-                            <option value="Rogue">Rogue</option>
-                            <option value="Blacksmith">Blacksmith</option>
-                            <option value="Alchemist">Alchemist</option>
-                            <option value="Gunslinger">Gunslinger</option>
-                            <option value="Druid">Druid</option>
-                            <option value="Other">อื่นๆ</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-200 uppercase mb-1">สาย (Role)</label>
-                        <select class="role-input w-full bg-slate-950/80 border border-white/10 rounded-lg px-1.5 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-cyan-400" required>
-                            <option value="Tank">🛡️ Tank</option>
-                            <option value="Healer">💖 Healer</option>
-                            <option value="DPS">⚔️ DPS</option>
-                            <option value="Support">✨ Support</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-200 uppercase mb-1">เลเวล (Lv)</label>
-                        <input type="number" class="level-input w-full bg-slate-950/80 border border-white/10 rounded-lg px-2 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-cyan-400" required placeholder="85">
-                    </div>
-                </div>
-
-                ${currentMode === 'solo' ? `
-                <div class="space-y-3 pt-1">
-                    <div class="space-y-1.5">
-                        <label class="block text-xs font-medium text-slate-200 uppercase">เวลาสะดวก (Time Slot)</label>
-                        <div class="solo-time-inputs grid grid-cols-2 gap-2.5">
-                            <div>
-                                <span class="block text-xs text-slate-400 mb-1">ตั้งแต่ (From)</span>
-                                <select class="solo-start-time w-full bg-slate-950/80 border border-white/10 rounded-lg px-2.5 py-2 text-sm text-white focus:outline-none focus:border-cyan-400 disabled:opacity-45 disabled:cursor-not-allowed disabled:bg-slate-900">
-                                    <option value="">-- ตั้งแต่ --</option>
-                                    ${timeOptionsHTML}
-                                </select>
-                            </div>
-                            <div>
-                                <span class="block text-xs text-slate-400 mb-1">ถึง (To)</span>
-                                <select class="solo-end-time w-full bg-slate-950/80 border border-white/10 rounded-lg px-2.5 py-2 text-sm text-white focus:outline-none focus:border-cyan-400 disabled:opacity-45 disabled:cursor-not-allowed disabled:bg-slate-900">
-                                    <option value="">-- ถึง --</option>
-                                    ${timeOptionsHTML}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="pt-0.5">
-                            <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
-                                <input type="checkbox" onchange="toggleSoloAllDay(this, ${index})" class="solo-all-day-checkbox w-3.5 h-3.5 rounded border-white/10 bg-slate-950 text-cyan-500 focus:ring-0">
-                                ว่างตลอดทั้งวัน (All Day)
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="space-y-1.5 pt-1 border-t border-white/5">
-                        <label class="block text-xs font-medium text-cyan-300 uppercase">กิจกรรมที่สะดวกเข้าร่วม (Activities)</label>
-                        <div class="grid grid-cols-1 gap-2">
-                            <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
-                                <input type="checkbox" name="soloActivity_${index}" value="Siege War" class="w-3.5 h-3.5 rounded border-white/10 bg-slate-950 text-cyan-500 focus:ring-0" checked>
-                                Siege War (อาทิตย์ 21:00-22:00 น.)
-                            </label>
-                            <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
-                                <input type="checkbox" name="soloActivity_${index}" value="Guild League" class="w-3.5 h-3.5 rounded border-white/10 bg-slate-950 text-cyan-500 focus:ring-0" checked>
-                                Guild League (อังคาร 21:30-22:25 / พฤหัส 22:00-22:25)
-                            </label>
-                            <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
-                                <input type="checkbox" name="soloActivity_${index}" value="Polarity Zone" class="w-3.5 h-3.5 rounded border-white/10 bg-slate-950 text-cyan-500 focus:ring-0" checked>
-                                Polarity Zone: บอสธรรมดา 1-4 (อาทิตย์ 17:00-17:30 น.)
-                            </label>
-                            <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
-                                <input type="checkbox" name="soloActivity_${index}" value="Polarity Zone Star" class="w-3.5 h-3.5 rounded border-white/10 bg-slate-950 text-cyan-500 focus:ring-0" checked>
-                                Polarity Zone: บอสระดับดาว (อาทิตย์ 17:00-17:30 น.)
-                            </label>
-                            <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
-                                <input type="checkbox" name="soloActivity_${index}" value="Mirror World" class="w-3.5 h-3.5 rounded border-white/10 bg-slate-950 text-cyan-500 focus:ring-0" checked>
-                                Mirror World (พฤหัส 21:00-21:15 น.)
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                ` : ''}
-            `;
-            return card;
-        }
-
-        function addMemberCard() {
-            const card = createMemberInputCard(memberFormIndex);
-            membersContainer.appendChild(card);
-            memberFormIndex++;
-            updateFormState();
-        }
-
-        window.removeMemberCard = function(index) {
-            const card = membersContainer.querySelector(`[data-index="${index}"]`);
-            if (card) {
-                card.remove();
-                updateFormState();
-            }
-        };
-
-        function updateFormState() {
-            const cards = membersContainer.querySelectorAll('.member-card');
-            entryCounter.innerText = `${cards.length} คน (${cards.length} Members)`;
-            nextMemberNum.innerText = cards.length + 1;
-        }
-
-        addMemberCard();
-        addMemberBtn.addEventListener('click', addMemberCard);
-
-        function sortMembersByJob() {
-            members.sort((a, b) => {
-                let jobA = (a.job || '').toLowerCase();
-                let jobB = (b.job || '').toLowerCase();
-                if (jobA < jobB) return jobSortAsc ? -1 : 1;
-                if (jobA > jobB) return jobSortAsc ? 1 : -1;
-                return 0;
-            });
-            const sortIcon = document.getElementById('sortIcon');
-            sortIcon.innerText = jobSortAsc ? '▲' : '▼';
-            jobSortAsc = !jobSortAsc;
-            updateUI();
-        }
-
-        function filterByJob(job) {
-            currentJobFilter = job;
-            document.querySelectorAll('.job-filter-btn').forEach(btn => {
-                if (btn.innerText === job || (job === 'All' && btn.innerText === 'ทั้งหมด')) {
-                    btn.className = "job-filter-btn px-2.5 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold whitespace-nowrap transition";
-                } else {
-                    btn.className = "job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition";
-                }
-            });
-            filterRosterTable();
-        }
-
-        function filterByRole(role) {
-            currentRoleFilter = role;
-            document.querySelectorAll('.role-chip').forEach(chip => {
-                if (chip.getAttribute('role-chip') === role) {
-                    chip.className = "role-chip px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 whitespace-nowrap font-medium transition";
-                } else {
-                    chip.className = "role-chip px-2.5 py-1 rounded-lg bg-slate-900 text-slate-300 hover:text-white border border-white/5 whitespace-nowrap font-medium transition";
-                }
-            });
-            filterRosterTable();
-        }
-
-        function filterRosterTable() {
-            const input = document.getElementById('rosterSearchInput');
-            const filter = input.value.toLowerCase().trim();
-            const tr = memberTableBody.getElementsByTagName('tr');
-
-            for (let i = 0; i < tr.length; i++) {
-                const tdIGN = tr[i].getElementsByTagName('td')[0];
-                const tdJob = tr[i].getElementsByTagName('td')[1];
-                const tdRole = tr[i].getElementsByTagName('td')[2];
-                if (tdIGN && tdJob && tdRole) {
-                    const textValue = tdIGN.textContent || tdIGN.innerText;
-                    const jobValue = tdJob.textContent || tdJob.innerText;
-                    const roleValue = tdRole.textContent || tdRole.innerText;
-                    
-                    const matchSearch = textValue.toLowerCase().indexOf(filter) > -1;
-                    const matchJob = currentJobFilter === 'All' || jobValue === currentJobFilter;
-                    const matchRole = currentRoleFilter === 'All' || roleValue.includes(currentRoleFilter);
-
-                    if (matchSearch && matchJob && matchRole) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
-                }
-            }
-        }
-
-        function filterPartyRoster() {
-            const filter = document.getElementById('partySearchInput').value.toLowerCase().trim();
-            const cards = partyGrid.querySelectorAll('.party-card-item');
-
-            cards.forEach(card => {
-                const partyText = card.innerText.toLowerCase();
-                if (filter === '' || partyText.includes(filter)) {
-                    card.style.display = "";
-                } else {
-                    card.style.display = "none";
-                }
-            });
-        }
-
-        function filterActivityRoster() {
-            const filter = document.getElementById('activitySearchInput').value.toLowerCase().trim();
-            const actCards = selectedActivityContent.querySelectorAll('.act-party-card-item');
-
-            actCards.forEach(card => {
-                const cardText = card.innerText.toLowerCase();
-                if (filter === '' || cardText.includes(filter)) {
-                    card.style.display = "";
-                } else {
-                    card.style.display = "none";
-                }
-            });
-        }
-
-        function copyAllPartiesText() {
-            if (globalParties.length === 0) {
-                showToast("ยังไม่มีข้อมูลปาร์ตี้สำหรับคัดลอก", "error");
-                return;
-            }
-            let textToCopy = `=== 🛡️ INTJ GUILD PARTY ROSTERS 🛡️ ===\n\n`;
-            globalParties.forEach(p => {
-                textToCopy += `[ ปาร์ตี้ที่ ${p.id} (${p.members.length}/5 คน) ]\n`;
-                p.members.forEach(m => {
-                    textToCopy += `- ${m.ign || '-'} (${m.job || '-'} / ${m.role || '-'} / Lv.${m.level || 1})\n`;
-                });
-                textToCopy += `\n`;
-            });
-
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                showToast("คัดลอกรายชื่อปาร์ตี้ทั้งหมดไปยังคลิปบอร์ดแล้ว!", "success");
-            }).catch(err => {
-                showToast("ไม่สามารถคัดลอกได้", "error");
-            });
-        }
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const isGroupAllDayChecked = document.getElementById('groupAllDay').checked;
-            let groupTimeSlot = 'ตลอดทั้งวัน (All Day)';
-            
-            if (!isGroupAllDayChecked) {
-                const gStart = document.getElementById('groupStartTime').value;
-                const gEnd = document.getElementById('groupEndTime').value;
-                groupTimeSlot = (gStart && gEnd) ? `${gStart} - ${gEnd}` : '-';
-            }
-
-            let groupActivities = [];
-            document.querySelectorAll('.group-act-checkbox:checked').forEach(cb => {
-                groupActivities.push(cb.value);
-            });
-            if (groupActivities.length === 0) groupActivities = ['Siege War'];
-            
-            const cards = membersContainer.querySelectorAll('.member-card');
-            
-            submitBtn.disabled = true;
-            submitBtn.innerText = `กำลังบันทึกข้อมูล...`;
-
-            // กำหนด Squad Group ID สำหรับการลงทะเบียนกลุ่มนี้ร่วมกันเพื่อให้ระบบจัดอยู่ปาร์ตี้เดียวกัน
-            const squadGroupId = currentMode === 'party' && cards.length > 0 ? 'squad_' + Date.now() : null;
-
-            for (const [idx, card] of cards.entries()) {
-                let timeSlotValue = groupTimeSlot;
-                let memberActivities = [...groupActivities];
-
-                if (currentMode === 'solo') {
-                    const isAllDayChecked = card.querySelector('.solo-all-day-checkbox').checked;
-                    if (isAllDayChecked) {
-                        timeSlotValue = 'ตลอดทั้งวัน (All Day)';
-                    } else {
-                        const sStart = card.querySelector('.solo-start-time').value;
-                        const sEnd = card.querySelector('.solo-end-time').value;
-                        timeSlotValue = (sStart && sEnd) ? `${sStart} - ${sEnd}` : '-';
-                    }
-
-                    memberActivities = [];
-                    card.querySelectorAll(`input[name="soloActivity_${card.dataset.index}"]:checked`).forEach(cb => {
-                        memberActivities.push(cb.value);
-                    });
-                    if (memberActivities.length === 0) memberActivities = ['Siege War'];
-                }
-
-                const newMember = {
-                    ign: card.querySelector('.ign-input').value,
-                    job: card.querySelector('.job-input').value,
-                    role: card.querySelector('.role-input').value,
-                    level: Number(card.querySelector('.level-input').value) || 1,
-                    timeSlot: timeSlotValue,
-                    activities: memberActivities,
-                    squadGroupId: squadGroupId
-                };
-
-                members.unshift(newMember);
-            }
-
-            await saveMembersToSheet();
-
-            showToast("ลงทะเบียนสำเร็จและบันทึกลง Google Sheets แล้ว!", "success");
-            
-            membersContainer.innerHTML = '';
-            memberFormIndex = 0;
-            addMemberCard();
-            
-            document.getElementById('groupAllDay').checked = false;
-            document.getElementById('groupStartTime').disabled = false;
-            document.getElementById('groupEndTime').disabled = false;
-            document.getElementById('groupStartTime').value = '';
-            document.getElementById('groupEndTime').value = '';
-
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = `
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                ยืนยันลงทะเบียน (Submit)
-            `;
-
-            updateUI();
-        });
-
-        async function deleteMember(ign) {
-            if (!confirm(`คุณต้องการลบรายชื่อ "${ign}" หรือไม่?`)) return;
-            members = members.filter(m => m.ign !== ign);
-            await saveMembersToSheet();
-            updateUI();
-            showToast(`ลบข้อมูล "${ign}" เรียบร้อยแล้ว`, "success");
-        }
-
-        function runAutoBalance() {
-            memberCount.innerText = members.length;
-
-            if (members.length === 0) {
-                partyGrid.innerHTML = `<div class="col-span-2 text-center text-slate-400 py-8">ยังไม่มีสมาชิกในระบบ</div>`;
-                globalParties = [];
-                totalPartyCountEl.innerText = '0';
-                incompletePartyCountEl.innerText = 'ยังไม่ครบ 5: 0 ทีม';
-                return;
-            }
-
-            let parties = [];
-
-            // 1. จัดกลุ่มสมาชิกที่ลงทะเบียนมาด้วยกัน (Squad Group ID) ให้อยู่ปาร์ตี้เดียวกันก่อนเสมอ
-            let squadMap = {};
-            let soloMembers = [];
-
-            members.forEach(m => {
-                if (m.squadGroupId) {
-                    if (!squadMap[m.squadGroupId]) {
-                        squadMap[m.squadGroupId] = [];
-                    }
-                    squadMap[m.squadGroupId].push(m);
-                } else {
-                    soloMembers.push(m);
-                }
-            });
-
-            // บรรจุสมาชิกกลุ่มลงปาร์ตี้ (หากเกิน 5 คนในกลุ่มเดียว จะตัดแบ่งเป็นปาร์ตี้ถัดไปแต่พยายามจัดสรรร่วมกัน)
-            Object.values(squadMap).forEach(groupList => {
-                for (let i = 0; i < groupList.length; i += 5) {
-                    let chunk = groupList.slice(i, i + 5);
-                    let targetParty = parties.find(p => p.members.length + chunk.length <= 5);
-                    if (!targetParty) {
-                        targetParty = { id: parties.length + 1, members: [] };
-                        parties.push(targetParty);
-                    }
-                    targetParty.members.push(...chunk);
-                }
-            });
-
-            // 2. จัดสรรสมาชิกเดี่ยว (Solo) หรือคนที่เหลือเติมลงปาร์ตี้ตามบทบาท (Tank/Healer/DPS/Support)
-            let healers = [...soloMembers.filter(m => m.role === 'Healer' || m.job === 'Priest')];
-            let tanks = [...soloMembers.filter(m => m.role === 'Tank' && !healers.includes(m))];
-            let others = [...soloMembers.filter(m => !healers.includes(m) && !tanks.includes(m))];
-
-            healers.sort(() => Math.random() - 0.5);
-            tanks.sort(() => Math.random() - 0.5);
-            others.sort(() => Math.random() - 0.5);
-
-            function getOrCreateAvailableParty() {
-                let p = parties.find(pt => pt.members.length < 5);
-                if (!p) {
-                    p = { id: parties.length + 1, members: [] };
-                    parties.push(p);
-                }
-                return p;
-            }
-
-            while (healers.length > 0) {
-                let p = getOrCreateAvailableParty();
-                p.members.push(healers.shift());
-            }
-
-            while (tanks.length > 0) {
-                let p = getOrCreateAvailableParty();
-                p.members.push(tanks.shift());
-            }
-
-            while (others.length > 0) {
-                let p = getOrCreateAvailableParty();
-                p.members.push(others.shift());
-            }
-
-            parties.forEach((p, idx) => { p.id = idx + 1; });
-
-            globalParties = parties;
-            totalPartyCountEl.innerText = parties.length;
-
-            let incompleteCount = parties.filter(p => p.members.length < 5).length;
-            incompletePartyCountEl.innerText = `ยังไม่ครบ 5: ${incompleteCount} ทีม`;
-
-            renderParties(parties);
-        }
-
-        function renderParties(parties) {
-            partyGrid.innerHTML = '';
-            if (parties.length === 0) {
-                partyGrid.innerHTML = `<div class="col-span-2 text-center text-slate-400 py-8">ยังไม่มีปาร์ตี้</div>`;
-                return;
-            }
-            parties.forEach((p) => {
-                const div = document.createElement('div');
-                div.className = 'party-card-item bg-slate-950/80 border border-white/10 rounded-2xl p-3.5 space-y-2';
-                
-                let comp = { Tank: 0, Healer: 0, DPS: 0, Support: 0 };
-                p.members.forEach(m => {
-                    const role = m.role || 'DPS';
-                    if (comp[role] !== undefined) comp[role]++;
-                    else comp.DPS++;
-                });
-
-                let memberListHTML = '';
-                p.members.forEach(m => {
-                    const job = m.job || 'Other';
-                    const role = m.role || 'DPS';
-                    memberListHTML += `
-                        <div class="flex justify-between items-center text-xs py-1 border-b border-white/5 last:border-none">
-                            <span class="${getJobTextColor(job)}">${m.ign || 'Unknown'} <span class="text-slate-400 font-normal">(${job})</span></span>
-                            <div class="flex items-center gap-2">
-                                <span class="px-2 py-0.5 rounded-full ${getRoleBadge(role)}">${role}</span>
-                                <span class="text-slate-400">Lv.${m.level || 1}</span>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                div.innerHTML = `
-                    <div class="flex justify-between items-center border-b border-white/10 pb-1.5">
-                        <span class="font-accent font-bold text-xs text-cyan-400">ปาร์ตี้ที่ ${p.id} (Party #${p.id})</span>
-                        <div class="flex items-center gap-2">
-                            <div class="flex items-center gap-1 text-[10px] text-slate-300 bg-slate-900 px-2 py-0.5 rounded border border-white/5">
-                                <span>🛡️${comp.Tank}</span>
-                                <span>💖${comp.Healer}</span>
-                                <span>⚔️${comp.DPS}</span>
-                                <span>✨${comp.Support}</span>
-                            </div>
-                            <span class="text-xs text-slate-400 font-accent">${p.members.length}/5 คน</span>
-                        </div>
-                    </div>
-                    <div class="space-y-1">${memberListHTML}</div>
-                `;
-                partyGrid.appendChild(div);
-            });
-            filterPartyRoster();
-        }
-
-        function renderActivitySubTabs() {
-            activitySubTabs.innerHTML = '';
-            activitiesData.forEach(act => {
-                const isSelected = act.key === selectedActivityKey;
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.onclick = () => {
-                    selectedActivityKey = act.key;
-                    renderActivitySubTabs();
-                    renderSelectedActivityContent();
-                };
-                btn.className = `py-2 px-3 rounded-xl text-xs font-accent font-bold transition-all flex items-center gap-1.5 ${
-                    isSelected 
-                        ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 shadow-md border border-cyan-400' 
-                        : 'bg-slate-900/80 text-slate-300 hover:text-white border border-white/5'
-                }`;
-                btn.innerHTML = `<span>${act.icon}</span> <span>${act.shortName}</span>`;
-                activitySubTabs.appendChild(btn);
-            });
-        }
-
-        function renderSelectedActivityContent() {
-            const act = activitiesData.find(a => a.key === selectedActivityKey) || activitiesData[0];
-
-            let partiesHTML = '';
-            let totalParticipatingCount = 0;
-
-            if (globalParties.length === 0) {
-                partiesHTML = `<div class="text-xs text-slate-400 py-8 text-center bg-slate-950/40 rounded-2xl border border-white/5">ยังไม่มีข้อมูลปาร์ตี้หลักสำหรับการจัดกิจกรรม</div>`;
-            } else {
-                let availableSubstitutes = members.filter(m => Array.isArray(m.activities) && m.activities.includes(act.key));
-                let assignedSubstitutesSet = new Set();
-
-                globalParties.forEach(party => {
-                    let finalPartyMembers = [];
-                    
-                    party.members.forEach(m => {
-                        const isParticipating = Array.isArray(m.activities) && m.activities.includes(act.key);
-                        if (isParticipating) {
-                            finalPartyMembers.push({ ...m, isSub: false });
-                            totalParticipatingCount++;
-                        } else {
-                            let replacement = availableSubstitutes.find(sub => 
-                                !assignedSubstitutesSet.has(sub.ign) && 
-                                !party.members.some(pm => pm.ign === sub.ign)
-                            );
-
-                            if (replacement) {
-                                assignedSubstitutesSet.add(replacement.ign);
-                                finalPartyMembers.push({ ...replacement, isSub: true, originalName: m.ign });
-                                totalParticipatingCount++;
-                            } else {
-                                finalPartyMembers.push({ ...m, isSub: false, notActive: true });
-                            }
-                        }
-                    });
-
-                    let membersHTML = '';
-                    finalPartyMembers.forEach(m => {
-                        const job = m.job || 'Other';
-                        const role = m.role || 'DPS';
-                        if (m.notActive) {
-                            membersHTML += `
-                                <div class="flex justify-between items-center text-xs py-1.5 border-b border-white/5 last:border-none opacity-40">
-                                    <span class="${getJobTextColor(job)}">${m.ign || 'Unknown'} <span class="text-slate-400 font-normal">(${job})</span> <span class="text-[10px] text-rose-400 font-normal">(ไม่ได้ลงกิจกรรมนี้)</span></span>
-                                    <div class="flex items-center gap-2">
-                                        <span class="px-2 py-0.5 rounded-full ${getRoleBadge(role)}">${role}</span>
-                                        <span class="text-slate-400">Lv.${m.level || 1}</span>
-                                    </div>
-                                </div>
-                            `;
-                        } else if (m.isSub) {
-                            membersHTML += `
-                                <div class="flex justify-between items-center text-xs py-1.5 border-b border-white/5 last:border-none bg-cyan-950/30 px-2 rounded-lg my-0.5 border border-cyan-500/20">
-                                    <span class="${getJobTextColor(job)}">
-                                        ${m.ign || 'Unknown'} <span class="text-slate-400 font-normal">(${job})</span> 
-                                        <span class="text-[10px] bg-cyan-500/20 text-cyan-300 px-1.5 py-0.5 rounded font-bold ml-1">🔄 (ตัวสำรอง แทน ${m.originalName})</span>
-                                    </span>
-                                    <div class="flex items-center gap-2">
-                                        <span class="px-2 py-0.5 rounded-full ${getRoleBadge(role)}">${role}</span>
-                                        <span class="text-slate-400">Lv.${m.level || 1}</span>
-                                    </div>
-                                </div>
-                            `;
-                        } else {
-                            membersHTML += `
-                                <div class="flex justify-between items-center text-xs py-1.5 border-b border-white/5 last:border-none">
-                                    <span class="${getJobTextColor(job)}">${m.ign || 'Unknown'} <span class="text-slate-400 font-normal">(${job})</span></span>
-                                    <div class="flex items-center gap-2">
-                                        <span class="px-2 py-0.5 rounded-full ${getRoleBadge(role)}">${role}</span>
-                                        <span class="text-slate-400">Lv.${m.level || 1}</span>
-                                    </div>
-                                </div>
-                            `;
-                        }
-                    });
-
-                    partiesHTML += `
-                        <div class="act-party-card-item bg-slate-950/80 border border-white/10 rounded-2xl p-4 space-y-2">
-                            <div class="flex justify-between items-center border-b border-white/10 pb-2">
-                                <span class="font-accent font-bold text-xs text-cyan-400">ปาร์ตี้เดิม #${party.id} (ปรับปรุงผู้เล่น)</span>
-                                <span class="text-xs text-slate-400 font-accent">ทีมกิจกรรม ${act.shortName}</span>
-                            </div>
-                            <div class="space-y-1">${membersHTML}</div>
-                        </div>
-                    `;
-                });
-            }
-
-            selectedActivityContent.innerHTML = `
-                <div class="glass-panel p-4 rounded-2xl border border-white/10 space-y-4">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-white/5 pb-3">
-                        <div>
-                            <h4 class="font-accent text-sm font-bold text-white flex items-center gap-2">
-                                <span class="text-base">${act.icon}</span> ${act.titleTH}
-                            </h4>
-                            <p class="text-xs text-cyan-400 font-accent mt-0.5">${act.titleEN}</p>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs font-bold text-white bg-slate-800/80 px-3 py-1.5 rounded-xl border border-white/10">ลงทะเบียนร่วม: ${totalParticipatingCount} คน</span>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[420px] overflow-y-auto pr-1">
-                        ${partiesHTML}
-                    </div>
-                </div>
-            `;
-            filterActivityRoster();
-        }
-
-        function getJobTextColor(job) {
-            switch(job) {
-                case 'Knight': case 'Paladin': return 'text-red-500 font-bold';
-                case 'Wizard': return 'text-sky-400 font-bold';
-                case 'Hunter': return 'text-yellow-400 font-bold';
-                case 'Bard/Dancer': return 'text-amber-500 font-bold';
-                case 'Gunslinger': return 'text-amber-800 font-bold';
-                case 'Priest': return 'text-emerald-400 font-bold';
-                case 'Monk': return 'text-lime-400 font-bold';
-                case 'Sage': return 'text-purple-400 font-bold';
-                case 'Assassin': return 'text-fuchsia-400 font-bold';
-                case 'Rogue': return 'text-rose-400 font-bold';
-                case 'Blacksmith': return 'text-orange-400 font-bold';
-                case 'Alchemist': return 'text-amber-300 font-bold';
-                case 'Druid': return 'text-teal-400 font-bold';
-                default: return 'text-slate-100 font-bold';
-            }
-        }
-
-        function updateUI() {
-            runAutoBalance();
-            renderActivitySubTabs();
-            renderSelectedActivityContent();
-            
-            memberTableBody.innerHTML = '';
-
-            if (members.length === 0) {
-                memberTableBody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400 text-sm">ยังไม่มีข้อมูล (No data)</td></tr>`;
-            } else {
-                members.forEach((m) => {
-                    const job = m.job || 'Other';
-                    const role = m.role || 'DPS';
-                    const jobColorClass = getJobTextColor(job);
-                    
-                    let actBadges = '';
-                    if (Array.isArray(m.activities) && m.activities.length > 0) {
-                        m.activities.forEach(act => {
-                            let shortName = act;
-                            if(act === 'Siege War') shortName = 'Siege War';
-                            if(act === 'Guild League') shortName = '🛡️ Guild League';
-                            if(act === 'Polarity Zone') shortName = '👹 Polarity (บอสธรรมดา 1-4)';
-                            if(act === 'Polarity Zone Star') shortName = '⭐ Polarity (บอสระดับดาว)';
-                            if(act === 'Mirror World') shortName = '🌀 Mirror World';
-                            actBadges += `<span class="inline-block bg-slate-800 border border-white/10 text-cyan-300 text-[10px] px-1.5 py-0.5 rounded mr-1 mb-0.5">${shortName}</span>`;
-                        });
-                    }
-
-                    const row = document.createElement('tr');
-                    row.className = 'hover:bg-slate-800/40 transition';
-                    row.innerHTML = `
-                        <td class="p-3.5 text-sm ${jobColorClass}">${m.ign || 'Unknown'}</td>
-                        <td class="p-3.5 text-sm ${jobColorClass}">${job}</td>
-                        <td class="p-3.5"><span class="px-2.5 py-1 rounded-full text-xs font-semibold ${getRoleBadge(role)}">${role}</span></td>
-                        <td class="p-3.5 text-center font-accent text-slate-200 text-sm">${m.level || 1}</td>
-                        <td class="p-3.5 text-center text-slate-300 text-sm">${m.timeSlot || '-'}</td>
-                        <td class="p-3.5"><div class="flex flex-wrap max-w-xs">${actBadges}</div></td>
-                        <td class="p-3.5 text-center">
-                            <button onclick="deleteMember('${m.ign || ''}')" class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-400 border border-rose-500/30 text-xs font-accent transition flex items-center gap-1 mx-auto">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                ลบ
-                            </button>
-                        </td>
-                    `;
-                    memberTableBody.appendChild(row);
-                });
-            }
-            filterRosterTable();
-        }
-
-        function getRoleBadge(role) {
-            switch(role) {
-                case 'Tank': return 'bg-blue-500/20 text-blue-300 border border-blue-500/35';
-                case 'Healer': return 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/35';
-                case 'DPS': return 'bg-rose-500/20 text-rose-300 border border-rose-500/35';
-                default: return 'bg-purple-500/20 text-purple-300 border border-purple-500/35';
-            }
-        }
-
-        loadMembersFromSheet();
     </script>
 </body>
 </html>
