@@ -242,7 +242,7 @@
                                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
                                 รายชื่อปาร์ตี้ (Party Rosters)
                             </h3>
-                            <p class="text-xs text-slate-300 mt-0.5">ระบบจะเกลี่ยพระและสมาชิกเข้าปาร์ตี้ให้อัตโนมัติ</p>
+                            <p class="text-xs text-slate-300 mt-0.5">ระบบจะเกลี่ยพระและสมาชิกเข้าปาร์ตี้ให้อัตโนมัติ (กลุ่มที่ลงทะเบียนด้วยกันจะถูกจัดให้อยู่ปาร์ตี้เดียวกัน)</p>
                         </div>
                         <div class="flex items-center gap-2 flex-wrap">
                             <button onclick="copyAllPartiesText()" class="bg-slate-800/80 hover:bg-slate-800 text-cyan-300 border border-cyan-500/30 px-3.5 py-2.5 rounded-xl text-xs flex items-center gap-1.5 transition">
@@ -490,7 +490,8 @@
                     role: m.role || 'DPS',
                     level: Number(m.level) || 1,
                     timeSlot: m.timeSlot || 'ตลอดทั้งวัน (All Day)',
-                    activities: Array.isArray(m.activities) ? m.activities : ['Siege War']
+                    activities: Array.isArray(m.activities) ? m.activities : ['Siege War'],
+                    squadGroupId: m.squadGroupId || null
                 }));
 
                 showToast("โหลดข้อมูลสำเร็จ!", "success");
@@ -504,7 +505,8 @@
                     role: m.role || 'DPS',
                     level: Number(m.level) || 1,
                     timeSlot: m.timeSlot || 'ตลอดทั้งวัน (All Day)',
-                    activities: Array.isArray(m.activities) ? m.activities : ['Siege War']
+                    activities: Array.isArray(m.activities) ? m.activities : ['Siege War'],
+                    squadGroupId: m.squadGroupId || null
                 }));
                 showToast("โหลดจากหน่วยความจำสำรอง (Offline Mode)", "info");
             }
@@ -572,7 +574,8 @@
                     role: randomRole,
                     level: randomLevel,
                     timeSlot: 'ตลอดทั้งวัน (All Day)',
-                    activities: randomAct
+                    activities: randomAct,
+                    squadGroupId: null
                 });
             }
 
@@ -941,6 +944,9 @@
             submitBtn.disabled = true;
             submitBtn.innerText = `กำลังบันทึกข้อมูล...`;
 
+            // กำหนด Squad Group ID เฉพาะกิจสำหรับการลงทะเบียนกลุ่มนี้ร่วมกัน
+            const squadGroupId = currentMode === 'party' && cards.length > 1 ? 'squad_' + Date.now() : null;
+
             for (const [idx, card] of cards.entries()) {
                 let timeSlotValue = groupTimeSlot;
                 let memberActivities = [...groupActivities];
@@ -968,7 +974,8 @@
                     role: card.querySelector('.role-input').value,
                     level: Number(card.querySelector('.level-input').value) || 1,
                     timeSlot: timeSlotValue,
-                    activities: memberActivities
+                    activities: memberActivities,
+                    squadGroupId: squadGroupId
                 };
 
                 members.unshift(newMember);
@@ -1016,52 +1023,74 @@
                 return;
             }
 
-            let healers = [...members.filter(m => m.role === 'Healer' || m.job === 'Priest')];
-            let tanks = [...members.filter(m => m.role === 'Tank' && !healers.includes(m))];
-            let others = [...members.filter(m => !healers.includes(m) && !tanks.includes(m))];
+            let parties = [];
+            let currentParty = { id: 1, members: [] };
+
+            // 1. จัดกลุ่มสมาชิกที่มาด้วยกัน (Squad Group ID) ให้อยู่ปาร์ตี้เดียวกันก่อน
+            let squadMap = {};
+            let soloMembers = [];
+
+            members.forEach(m => {
+                if (m.squadGroupId) {
+                    if (!squadMap[m.squadGroupId]) {
+                        squadMap[m.squadGroupId] = [];
+                    }
+                    squadMap[m.squadGroupId].push(m);
+                } else {
+                    soloMembers.push(m);
+                }
+            });
+
+            // บรรจุสมาชิกกลุ่มลงปาร์ตี้ (หากเกิน 5 คนในกลุ่มเดียว จะตัดแบ่งเป็นปาร์ตี้ถัดไปแต่พยายามจัดสรรร่วมกัน)
+            Object.values(squadMap).forEach(groupList => {
+                // ถ้ากลุ่มมีสมาชิกเกิน 5 คน ให้แยกเป็นหลายปาร์ตี้ย่อย
+                for (let i = 0; i < groupList.length; i += 5) {
+                    let chunk = groupList.slice(i, i + 5);
+                    let targetParty = parties.find(p => p.members.length + chunk.length <= 5);
+                    if (!targetParty) {
+                        targetParty = { id: parties.length + 1, members: [] };
+                        parties.push(targetParty);
+                    }
+                    targetParty.members.push(...chunk);
+                }
+            });
+
+            // 2. จัดสรรสมาชิกเดี่ยว (Solo) หรือคนที่เหลือเติมลงปาร์ตี้
+            let healers = [...soloMembers.filter(m => m.role === 'Healer' || m.job === 'Priest')];
+            let tanks = [...soloMembers.filter(m => m.role === 'Tank' && !healers.includes(m))];
+            let others = [...soloMembers.filter(m => !healers.includes(m) && !tanks.includes(m))];
 
             healers.sort(() => Math.random() - 0.5);
             tanks.sort(() => Math.random() - 0.5);
             others.sort(() => Math.random() - 0.5);
 
-            let partySize = 5;
-            let totalParties = Math.ceil(members.length / partySize);
-            let parties = [];
-            for (let i = 0; i < totalParties; i++) {
-                parties.push({ id: i + 1, members: [] });
+            // ฟังก์ชันช่วยหาปาร์ตี้ที่ยังไม่เต็ม 5 คน
+            function getOrCreateAvailableParty() {
+                let p = parties.find(pt => pt.members.length < 5);
+                if (!p) {
+                    p = { id: parties.length + 1, members: [] };
+                    parties.push(p);
+                }
+                return p;
             }
 
-            let partyIndex = 0;
             while (healers.length > 0) {
-                parties[partyIndex % totalParties].members.push(healers.shift());
-                partyIndex++;
+                let p = getOrCreateAvailableParty();
+                p.members.push(healers.shift());
             }
 
-            partyIndex = 0;
             while (tanks.length > 0) {
-                let attempts = 0;
-                while (parties[partyIndex % totalParties].members.length >= partySize && attempts < totalParties) {
-                    partyIndex++;
-                    attempts++;
-                }
-                if (parties[partyIndex % totalParties].members.length < partySize) {
-                    parties[partyIndex % totalParties].members.push(tanks.shift());
-                }
-                partyIndex++;
+                let p = getOrCreateAvailableParty();
+                p.members.push(tanks.shift());
             }
 
-            partyIndex = 0;
             while (others.length > 0) {
-                let attempts = 0;
-                while (parties[partyIndex % totalParties].members.length >= partySize && attempts < totalParties) {
-                    partyIndex++;
-                    attempts++;
-                }
-                if (parties[partyIndex % totalParties].members.length < partySize) {
-                    parties[partyIndex % totalParties].members.push(others.shift());
-                }
-                partyIndex++;
+                let p = getOrCreateAvailableParty();
+                p.members.push(others.shift());
             }
+
+            // จัดเรียงลำดับ ID ปาร์ตี้ใหม่ให้ต่อเนื่อง
+            parties.forEach((p, idx) => { p.id = idx + 1; });
 
             globalParties = parties;
             totalPartyCountEl.innerText = parties.length;
