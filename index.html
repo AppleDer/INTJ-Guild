@@ -242,7 +242,7 @@
                                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
                                 รายชื่อปาร์ตี้ (Party Rosters)
                             </h3>
-                            <p class="text-xs text-slate-300 mt-0.5">กลุ่มที่ลงทะเบียนด้วยกันจะถูกจัดให้อยู่ปาร์ตี้เดียวกันเสมอในทุกกิจกรรม</p>
+                            <p class="text-xs text-slate-300 mt-0.5">กลุ่มที่ลงทะเบียนด้วยกันจะถูกจัดให้อยู่ปาร์ตี้เดียวกันเสมอ และระบบกระจาย Priest ไม่ให้ซ้ำกัน</p>
                         </div>
                         <div class="flex items-center gap-2 flex-wrap">
                             <button onclick="copyAllPartiesText()" class="bg-slate-800/80 hover:bg-slate-800 text-cyan-300 border border-cyan-500/30 px-3.5 py-2.5 rounded-xl text-xs flex items-center gap-1.5 transition">
@@ -944,7 +944,6 @@
             submitBtn.disabled = true;
             submitBtn.innerText = `กำลังบันทึกข้อมูล...`;
 
-            // กำหนด Squad Group ID สำหรับการลงทะเบียนกลุ่มร่วมกัน เพื่อให้ระบบจัดให้อยู่ปาร์ตี้เดียวกันเสมอ
             const squadGroupId = currentMode === 'party' && cards.length > 0 ? 'squad_' + Date.now() : null;
 
             for (const [idx, card] of cards.entries()) {
@@ -1025,7 +1024,7 @@
 
             let parties = [];
 
-            // 1. จัดกลุ่มสมาชิกที่ลงทะเบียนมาด้วยกัน (Squad Group ID) ให้อยู่ปาร์ตี้เดียวกันก่อนเสมอ (Strict Squad Lock)
+            // 1. จัดกลุ่มสมาชิกที่ลงทะเบียนมาด้วยกัน (Squad Group ID) ให้อยู่ปาร์ตี้เดียวกันก่อนเสมอ
             let squadMap = {};
             let soloMembers = [];
 
@@ -1040,7 +1039,6 @@
                 }
             });
 
-            // บรรจุสมาชิกกลุ่มลงปาร์ตี้ (หากเกิน 5 คนในกลุ่มเดียว จะตัดแบ่งเป็นปาร์ตี้ถัดไป)
             Object.values(squadMap).forEach(groupList => {
                 for (let i = 0; i < groupList.length; i += 5) {
                     let chunk = groupList.slice(i, i + 5);
@@ -1053,12 +1051,14 @@
                 }
             });
 
-            // 2. จัดสรรสมาชิกเดี่ยว (Solo) หรือคนที่เหลือเติมลงปาร์ตี้ตามบทบาท
-            let healers = [...soloMembers.filter(m => m.role === 'Healer' || m.job === 'Priest')];
-            let tanks = [...soloMembers.filter(m => m.role === 'Tank' && !healers.includes(m))];
-            let others = [...soloMembers.filter(m => !healers.includes(m) && !tanks.includes(m))];
+            // 2. แยกประเภทผู้เล่นเดี่ยว (Solo) โดยแยกระหว่าง Priest กับอาชีพอื่น ๆ
+            let priests = [...soloMembers.filter(m => m.job === 'Priest')];
+            let nonPriestHealers = [...soloMembers.filter(m => m.job !== 'Priest' && (m.role === 'Healer' || m.job === 'Druid'))];
+            let tanks = [...soloMembers.filter(m => m.role === 'Tank' && !priests.includes(m) && !nonPriestHealers.includes(m))];
+            let others = [...soloMembers.filter(m => !priests.includes(m) && !nonPriestHealers.includes(m) && !tanks.includes(m))];
 
-            healers.sort(() => Math.random() - 0.5);
+            priests.sort(() => Math.random() - 0.5);
+            nonPriestHealers.sort(() => Math.random() - 0.5);
             tanks.sort(() => Math.random() - 0.5);
             others.sort(() => Math.random() - 0.5);
 
@@ -1071,16 +1071,30 @@
                 return p;
             }
 
-            while (healers.length > 0) {
-                let p = getOrCreateAvailableParty();
-                p.members.push(healers.shift());
+            // 3. กระจาย Priest ไม่ให้ซ้ำปาร์ตี้เดียวกัน (พยายามใส่ปาร์ตี้ที่ยังไม่มี Priest ก่อน)
+            while (priests.length > 0) {
+                let priestMember = priests.shift();
+                // ค้นหาปาร์ตี้ที่ยังไม่มี Priest และยังไม่เต็ม 5 คน
+                let targetParty = parties.find(p => p.members.length < 5 && !p.members.some(m => m.job === 'Priest'));
+                if (!targetParty) {
+                    targetParty = getOrCreateAvailableParty();
+                }
+                targetParty.members.push(priestMember);
             }
 
+            // เติม Healer / Support อื่นๆ
+            while (nonPriestHealers.length > 0) {
+                let p = getOrCreateAvailableParty();
+                p.members.push(nonPriestHealers.shift());
+            }
+
+            // เติม Tank
             while (tanks.length > 0) {
                 let p = getOrCreateAvailableParty();
                 p.members.push(tanks.shift());
             }
 
+            // เติม DPS / อื่นๆ จนครบ
             while (others.length > 0) {
                 let p = getOrCreateAvailableParty();
                 p.members.push(others.shift());
