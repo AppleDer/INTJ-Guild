@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INTJ GUILD - Modern Registration & Auto Party</title>
+    <title>INTJ GUILD - Member Registration HQ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -17,16 +17,6 @@
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .glass-panel-interactive {
-            background: rgba(17, 24, 39, 0.7);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .glass-panel-interactive:hover {
-            border-color: rgba(56, 189, 248, 0.3);
-            box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.15);
         }
         .text-glow {
             text-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
@@ -79,24 +69,17 @@
                         <h1 class="font-accent text-xl font-extrabold text-white text-glow">INTJ GUILD</h1>
                         <span class="text-xs font-accent font-semibold px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">Ragnarok HQ</span>
                     </div>
-                    <p class="text-xs text-slate-300 mt-0.5">ระบบลงทะเบียนสมาชิก & จัดปาร์ตี้อัตโนมัติ (Google Sheets Connected)</p>
+                    <p class="text-xs text-slate-300 mt-0.5">ระบบลงทะเบียนสมาชิกกิลด์ (Google Sheets Connected)</p>
                 </div>
             </div>
 
-            <div class="flex items-center gap-3">
-                <button id="adminAuthBtn" onclick="toggleAdminMode()" class="bg-slate-800/80 hover:bg-slate-800 text-cyan-400 border border-cyan-500/30 px-3.5 py-1.5 rounded-full text-xs font-accent flex items-center gap-1.5 transition">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                    <span id="adminAuthText">เข้าสู่ระบบ Admin (ปลดล็อกปาร์ตี้)</span>
+            <div class="flex items-center gap-2">
+                <button onclick="loadMock137Members()" class="bg-indigo-600/80 hover:bg-indigo-600 text-white border border-indigo-400/30 px-3.5 py-1.5 rounded-full text-xs font-accent flex items-center gap-1.5 transition shadow-lg">
+                    📥 โหลดข้อมูลจำลอง
                 </button>
-                
-                <div id="adminButtonsGroup" class="hidden flex items-center gap-2">
-                    <button onclick="loadMock137Members()" class="bg-indigo-600 hover:bg-indigo-500 text-white border border-indigo-400/40 px-3 py-1.5 rounded-full text-xs font-accent flex items-center gap-1.5 transition shadow-lg">
-                        📥 โหลด 137 คน
-                    </button>
-                    <button onclick="clearAllMembers()" class="bg-rose-600/80 hover:bg-rose-600 text-white border border-rose-400/40 px-3 py-1.5 rounded-full text-xs font-accent flex items-center gap-1.5 transition shadow-lg">
-                        🗑️ ลบทั้งหมด
-                    </button>
-                </div>
+                <button onclick="clearAllMembers()" class="bg-rose-600/80 hover:bg-rose-600 text-white border border-rose-400/30 px-3.5 py-1.5 rounded-full text-xs font-accent flex items-center gap-1.5 transition shadow-lg">
+                    🗑️ ลบทั้งหมด
+                </button>
             </div>
         </div>
     </header>
@@ -205,15 +188,14 @@
                     </span>
                     <div>
                         <h2 class="font-accent text-base font-bold text-white flex items-center gap-2 flex-wrap">
-                            สมาชิกกิลด์ (Roster)
-                            <span class="text-xs bg-indigo-500/20 text-indigo-300 font-accent px-2.5 py-0.5 rounded-full border border-indigo-500/30">สมาชิก: <span id="memberCount">0</span> คน</span>
-                            <span class="text-xs bg-emerald-500/20 text-emerald-300 font-accent px-2.5 py-0.5 rounded-full border border-emerald-500/30">ปาร์ตี้: <span id="totalPartyCount">0</span> ทีม (<span id="incompletePartyCount" class="text-amber-300">ยังไม่ครบ 5: 0 ทีม</span>)</span>
+                            รายชื่อสมาชิกกิลด์ (Roster)
+                            <span class="text-xs bg-indigo-500/20 text-indigo-300 font-accent px-2.5 py-0.5 rounded-full border border-indigo-500/30">สมาชิกทั้งหมด: <span id="memberCount">0</span> คน</span>
                         </h2>
-                        <p class="text-xs text-slate-300 mt-0.5">รายชื่อสมาชิกที่ลงทะเบียนทั้งหมดและการจัดสรรทีม</p>
+                        <p class="text-xs text-slate-300 mt-0.5">แสดงรายชื่อตัวละคร แยกประเภทการลงทะเบียนแบบเดี่ยวหรือกลุ่ม</p>
                     </div>
                 </div>
                 
-                <div class="flex flex-wrap items-center gap-2">
+                <div class="flex items-center gap-2">
                     <button id="refreshBtn" onclick="loadMembersFromSheet()" class="bg-slate-800/80 hover:bg-slate-800 text-slate-300 border border-white/10 px-3 py-2.5 rounded-xl text-xs flex items-center gap-1.5 transition">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                         รีเฟรชข้อมูล
@@ -221,120 +203,43 @@
                 </div>
             </div>
 
-            <!-- Tab Navigation -->
-            <div class="grid grid-cols-2 gap-2 p-1.5 bg-slate-950/80 rounded-2xl border border-white/5">
-                <button type="button" id="tabPartyBtn" onclick="switchMainTab('party')" class="py-3 px-4 rounded-xl text-xs sm:text-sm font-accent font-bold transition-all flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 shadow-md">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                    รายชื่อปาร์ตี้และสมาชิก
-                </button>
-                <button type="button" id="tabActivityBtn" onclick="switchMainTab('activity')" class="py-3 px-4 rounded-xl text-xs sm:text-sm font-accent font-bold transition-all flex items-center justify-center gap-2 text-slate-400 hover:text-white">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                    รายชื่อปาร์ตี้ร่วมกิจกรรม
-                </button>
-            </div>
-
-            <!-- Tab Content 1: Party Management View (เฉพาะส่วนนี้ที่จะซ่อน และแสดงเฉพาะ Admin) -->
-            <div id="viewPartyTab" class="space-y-4">
-                <div id="adminProtectedPartySection" class="glass-panel p-5 rounded-3xl border border-emerald-500/20 shadow-2xl space-y-4">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-white/5 pb-3">
-                        <div>
-                            <h3 class="font-accent text-sm font-bold text-emerald-400 flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                                รายชื่อปาร์ตี้ (Party Rosters)
-                            </h3>
-                            <p class="text-xs text-slate-300 mt-0.5">กลุ่มที่ลงทะเบียนด้วยกันจะถูกจัดให้อยู่ปาร์ตี้เดียวกันเสมอในทุกกิจกรรม</p>
-                        </div>
-                        <div class="flex items-center gap-2 flex-wrap">
-                            <button onclick="copyAllPartiesText()" class="bg-slate-800/80 hover:bg-slate-800 text-cyan-300 border border-cyan-500/30 px-3.5 py-2.5 rounded-xl text-xs flex items-center gap-1.5 transition">
-                                📋 คัดลอกปาร์ตี้ทั้งหมด
-                            </button>
-                            <button id="autoBalanceBtn" onclick="handleRebalanceClick()" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-accent font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-1.5 shadow-lg shadow-emerald-500/10 transition">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                                จัดทีมใหม่ (Re-Balance)
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="w-full">
-                        <input type="text" id="partySearchInput" onkeyup="filterPartyRoster()" placeholder="🔍 ค้นหาชื่อตัวละครในปาร์ตี้ (เช่น Shadow, Priest)..." class="w-full bg-slate-950/80 border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-400">
-                    </div>
-
-                    <div id="partyGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[520px] overflow-y-auto pr-1">
-                        <!-- Parties populated here -->
-                    </div>
-                </div>
-
-                <!-- ข้อความแสดงเมื่อไม่ใช่ Admin (แสดงเฉพาะส่วนปาร์ตี้) -->
-                <div id="guestPartyRestrictedMsg" class="glass-panel p-8 rounded-3xl border border-white/5 text-center space-y-3 hidden">
-                    <div class="w-12 h-12 mx-auto rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 text-lg">🔒</div>
-                    <h3 class="font-accent font-bold text-sm text-white">รายชื่อปาร์ตี้ถูกซ่อนไว้</h3>
-                    <p class="text-xs text-slate-400 max-w-md mx-auto">ส่วนรายชื่อปาร์ตี้ทั้งหมดและปุ่มจัดทีมใหม่จะแสดงเฉพาะผู้ดูแลระบบ (Admin) เท่านั้น กดปุ่ม <span class="text-cyan-400 font-semibold">"เข้าสู่ระบบ Admin"</span> ที่ด้านบนขวาเพื่อดู</p>
-                </div>
-            </div>
-
-            <!-- Tab Content 2: Activity Summary View -->
-            <div id="viewActivityTab" class="space-y-4 hidden">
-                <div class="glass-panel p-5 rounded-3xl border border-cyan-500/20 shadow-2xl space-y-4">
-                    <div class="border-b border-white/5 pb-3">
-                        <h3 class="font-accent text-sm font-bold text-cyan-400 flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
-                            รายชื่อปาร์ตี้และสมาชิกที่เข้าร่วมกิจกรรม (Activity Party Rosters)
-                        </h3>
-                        <p class="text-xs text-slate-300 mt-0.5">สมาชิกกลุ่มยังคงอยู่ปาร์ตี้เดิม หากใครไม่ลงกิจกรรมจะมีตัวสำรองมาแทนที่ในปาร์ตี้เดิม</p>
-                    </div>
-
-                    <div id="activitySubTabs" class="flex flex-wrap gap-2"></div>
-
-                    <div class="w-full">
-                        <input type="text" id="activitySearchInput" onkeyup="filterActivityRoster()" placeholder="🔍 ค้นหาชื่อตัวละครในกิจกรรมนี้..." class="w-full bg-slate-950/80 border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
-                    </div>
-
-                    <div id="selectedActivityContent" class="pt-2"></div>
-                </div>
-            </div>
-
-            <!-- Table Roster (ไม่ถูกซ่อน แสดงปกติสำหรับทุกคน) -->
+            <!-- Table Roster -->
             <div class="glass-panel rounded-3xl overflow-hidden shadow-2xl">
-                <!-- Sticky Table Top Header Controls -->
+                <!-- Top Controls -->
                 <div class="p-4 border-b border-white/5 flex flex-col lg:flex-row justify-between items-center gap-3 bg-slate-900/80 backdrop-blur-md sticky top-16 z-30">
-                    <span class="font-accent text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-                        <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
-                        รายชื่อที่ลงทะเบียนทั้งหมด (Operatives)
-                    </span>
+                    <div class="flex items-center gap-2">
+                        <span class="font-accent text-xs font-bold text-slate-300 uppercase tracking-wider">ประเภทการลงทะเบียน:</span>
+                        <div class="flex items-center gap-1 bg-slate-950/80 p-1 rounded-xl border border-white/10 text-xs">
+                            <button onclick="filterByType('All')" id="typeFilterAll" class="px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold transition">ทั้งหมด</button>
+                            <button onclick="filterByType('Solo')" id="typeFilterSolo" class="px-3 py-1 rounded-lg text-slate-300 hover:text-white transition">👤 เดี่ยว (Solo)</button>
+                            <button onclick="filterByType('Squad')" id="typeFilterSquad" class="px-3 py-1 rounded-lg text-slate-300 hover:text-white transition">👥 กลุ่ม (Squad)</button>
+                        </div>
+                    </div>
                     
-                    <div class="flex flex-col sm:flex-row flex-wrap items-center gap-2 w-full lg:w-auto">
-                        <!-- Job Filter Dropdown / Buttons -->
-                        <div class="flex items-center gap-1 bg-slate-950/80 p-1 rounded-xl border border-white/10 text-xs overflow-x-auto max-w-full">
-                            <button onclick="filterByJob('All')" class="job-filter-btn px-2.5 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold whitespace-nowrap transition">ทั้งหมด</button>
-                            <button onclick="filterByJob('Knight')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Knight</button>
-                            <button onclick="filterByJob('Paladin')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Paladin</button>
-                            <button onclick="filterByJob('Priest')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Priest</button>
-                            <button onclick="filterByJob('Monk')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Monk</button>
-                            <button onclick="filterByJob('Wizard')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Wizard</button>
-                            <button onclick="filterByJob('Hunter')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Hunter</button>
-                            <button onclick="filterByJob('Assassin')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Assassin</button>
-                        </div>
-                        <div class="w-full sm:w-44">
-                            <input type="text" id="rosterSearchInput" onkeyup="filterRosterTable()" placeholder="🔍 ค้นหาชื่อตัวละคร..." class="w-full bg-slate-950/80 border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
-                        </div>
+                    <div class="w-full sm:w-48">
+                        <input type="text" id="rosterSearchInput" onkeyup="filterRosterTable()" placeholder="🔍 ค้นหาชื่อตัวละคร..." class="w-full bg-slate-950/80 border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
                     </div>
                 </div>
 
-                <!-- Quick Filter Role Chips Bar -->
+                <!-- Job Filter Bar -->
                 <div class="px-4 py-2.5 bg-slate-950/60 border-b border-white/5 flex items-center gap-2 overflow-x-auto text-xs">
-                    <span class="text-slate-400 font-semibold whitespace-nowrap">กรองด่วนตามบทบาท:</span>
-                    <button onclick="filterByRole('All')" role-chip="All" class="role-chip px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 whitespace-nowrap font-medium transition">ทั้งหมด</button>
-                    <button onclick="filterByRole('Tank')" role-chip="Tank" class="role-chip px-2.5 py-1 rounded-lg bg-slate-900 text-slate-300 hover:text-white border border-white/5 whitespace-nowrap font-medium transition">🛡️ Tank</button>
-                    <button onclick="filterByRole('Healer')" role-chip="Healer" class="role-chip px-2.5 py-1 rounded-lg bg-slate-900 text-slate-300 hover:text-white border border-white/5 whitespace-nowrap font-medium transition">💖 Healer</button>
-                    <button onclick="filterByRole('DPS')" role-chip="DPS" class="role-chip px-2.5 py-1 rounded-lg bg-slate-900 text-slate-300 hover:text-white border border-white/5 whitespace-nowrap font-medium transition">⚔️ DPS</button>
-                    <button onclick="filterByRole('Support')" role-chip="Support" class="role-chip px-2.5 py-1 rounded-lg bg-slate-900 text-slate-300 hover:text-white border border-white/5 whitespace-nowrap font-medium transition">✨ Support</button>
+                    <span class="text-slate-400 font-semibold whitespace-nowrap">อาชีพ:</span>
+                    <button onclick="filterByJob('All')" class="job-filter-btn px-2.5 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold whitespace-nowrap transition">ทั้งหมด</button>
+                    <button onclick="filterByJob('Knight')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Knight</button>
+                    <button onclick="filterByJob('Paladin')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Paladin</button>
+                    <button onclick="filterByJob('Priest')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Priest</button>
+                    <button onclick="filterByJob('Monk')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Monk</button>
+                    <button onclick="filterByJob('Wizard')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Wizard</button>
+                    <button onclick="filterByJob('Hunter')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Hunter</button>
+                    <button onclick="filterByJob('Assassin')" class="job-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white whitespace-nowrap transition">Assassin</button>
                 </div>
                 
-                <div class="overflow-x-auto max-h-[500px]">
+                <div class="overflow-x-auto max-h-[550px]">
                     <table class="w-full text-left text-sm text-slate-200 relative" id="memberTable">
                         <thead class="bg-slate-950/90 text-slate-300 uppercase text-xs font-accent border-b border-white/5 sticky top-0 z-20 backdrop-blur-md">
                             <tr>
                                 <th class="p-3.5 font-semibold">ชื่อตัวละคร (IGN)</th>
+                                <th class="p-3.5 font-semibold">ประเภท (Type)</th>
                                 <th class="p-3.5 font-semibold cursor-pointer hover:text-cyan-400 transition select-none" onclick="sortMembersByJob()">
                                     อาชีพ (Job) <span id="sortIcon" class="text-cyan-400">↕</span>
                                 </th>
@@ -364,29 +269,13 @@
         const entryCounter = document.getElementById('entryCounter');
         const memberTableBody = document.getElementById('memberTableBody');
         const memberCount = document.getElementById('memberCount');
-        const totalPartyCountEl = document.getElementById('totalPartyCount');
-        const incompletePartyCountEl = document.getElementById('incompletePartyCount');
-        const autoBalanceBtn = document.getElementById('autoBalanceBtn');
-        const adminAuthBtn = document.getElementById('adminAuthBtn');
-        const adminAuthText = document.getElementById('adminAuthText');
-        const adminButtonsGroup = document.getElementById('adminButtonsGroup');
-        const partyGrid = document.getElementById('partyGrid');
-        const adminProtectedPartySection = document.getElementById('adminProtectedPartySection');
-        const guestPartyRestrictedMsg = document.getElementById('guestPartyRestrictedMsg');
-        const activitySubTabs = document.getElementById('activitySubTabs');
-        const selectedActivityContent = document.getElementById('selectedActivityContent');
 
         let currentMode = 'solo';
         let memberFormIndex = 0;
         let members = [];
-        let globalParties = [];
         let jobSortAsc = true;
-        let selectedActivityKey = 'Siege War';
         let currentJobFilter = 'All';
-        let currentRoleFilter = 'All';
-
-        let isAdminLoggedIn = false;
-        const ADMIN_PASSWORD = "AppleDer1"; 
+        let currentTypeFilter = 'All';
 
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
@@ -415,42 +304,13 @@
             }, 3500);
         }
 
-        // ควบคุมเฉพาะการแสดงผลส่วนรายชื่อปาร์ตี้
-        function toggleAdminMode() {
-            if (!isAdminLoggedIn) {
-                const pwd = prompt("กรุณากรอกรหัสผ่าน Admin เพื่อดูรายชื่อปาร์ตี้:");
-                if (pwd === ADMIN_PASSWORD) {
-                    isAdminLoggedIn = true;
-                    adminAuthText.textContent = "ออกจากระบบ Admin";
-                    adminAuthBtn.className = "bg-emerald-600/80 hover:bg-emerald-600 text-white border border-emerald-500/30 px-3.5 py-1.5 rounded-full text-xs font-accent flex items-center gap-1.5 transition";
-                    adminButtonsGroup.classList.remove('hidden');
-                    showToast("เข้าสู่ระบบ Admin สำเร็จ", "success");
-                } else if (pwd !== null) {
-                    showToast("รหัสผ่านไม่ถูกต้อง", "error");
-                }
-            } else {
-                isAdminLoggedIn = false;
-                adminAuthText.textContent = "เข้าสู่ระบบ Admin (ปลดล็อกปาร์ตี้)";
-                adminAuthBtn.className = "bg-slate-800/80 hover:bg-slate-800 text-cyan-400 border border-cyan-500/30 px-3.5 py-1.5 rounded-full text-xs font-accent flex items-center gap-1.5 transition";
-                adminButtonsGroup.classList.add('hidden');
-                showToast("ออกจากระบบ Admin แล้ว", "info");
-            }
-            updateAdminUIVisibility();
+        function filterByType(type) {
+            currentTypeFilter = type;
+            document.getElementById('typeFilterAll').className = type === 'All' ? 'px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold transition' : 'px-3 py-1 rounded-lg text-slate-300 hover:text-white transition';
+            document.getElementById('typeFilterSolo').className = type === 'Solo' ? 'px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold transition' : 'px-3 py-1 rounded-lg text-slate-300 hover:text-white transition';
+            document.getElementById('typeFilterSquad').className = type === 'Squad' ? 'px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold transition' : 'px-3 py-1 rounded-lg text-slate-300 hover:text-white transition';
+            renderTable();
         }
-
-        function updateAdminUIVisibility() {
-            if (isAdminLoggedIn) {
-                adminProtectedPartySection.classList.remove('hidden');
-                guestPartyRestrictedMsg.classList.add('hidden');
-            } else {
-                adminProtectedPartySection.classList.add('hidden');
-                guestPartyRestrictedMsg.classList.remove('hidden');
-            }
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            updateAdminUIVisibility();
-        });
     </script>
 </body>
 </html>
