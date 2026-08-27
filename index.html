@@ -346,7 +346,7 @@
     </main>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwWlzr_CXMlT4wRwUmiWhGP6V2u--GSm7Zc7LZAvKi_Gmf4PIX2Z316TRpcZtEdvZGWZA/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwrqQnwlfxl9xkqLYAtIL8WdaY_lpP6_EnLyJJpIazu2CoXlaFS21V0paDdqSa5mKd8/exec";
 
         const form = document.getElementById('registerForm');
         const membersContainer = document.getElementById('membersContainer');
@@ -476,19 +476,35 @@
             try {
                 const response = await fetch(SCRIPT_URL);
                 const result = await response.json();
+                let rawData = [];
                 if (result && Array.isArray(result)) {
-                    members = result;
-                    showToast("โหลดข้อมูลสำเร็จ!", "success");
+                    rawData = result;
                 } else if (result && result.data && Array.isArray(result.data)) {
-                    members = result.data;
-                    showToast("โหลดข้อมูลสำเร็จ!", "success");
-                } else {
-                    members = [];
+                    rawData = result.data;
                 }
+                
+                members = rawData.map(m => ({
+                    ign: m.ign || 'Unknown',
+                    job: m.job || 'Other',
+                    role: m.role || 'DPS',
+                    level: Number(m.level) || 1,
+                    timeSlot: m.timeSlot || 'ตลอดทั้งวัน (All Day)',
+                    activities: Array.isArray(m.activities) ? m.activities : ['Siege War']
+                }));
+
+                showToast("โหลดข้อมูลสำเร็จ!", "success");
             } catch(e) {
                 console.error(e);
                 const saved = localStorage.getItem('intj_guild_members');
-                members = saved ? JSON.parse(saved) : [];
+                let rawSaved = saved ? JSON.parse(saved) : [];
+                members = rawSaved.map(m => ({
+                    ign: m.ign || 'Unknown',
+                    job: m.job || 'Other',
+                    role: m.role || 'DPS',
+                    level: Number(m.level) || 1,
+                    timeSlot: m.timeSlot || 'ตลอดทั้งวัน (All Day)',
+                    activities: Array.isArray(m.activities) ? m.activities : ['Siege War']
+                }));
                 showToast("โหลดจากหน่วยความจำสำรอง (Offline Mode)", "info");
             }
             updateUI();
@@ -788,8 +804,8 @@
 
         function sortMembersByJob() {
             members.sort((a, b) => {
-                let jobA = a.job.toLowerCase();
-                let jobB = b.job.toLowerCase();
+                let jobA = (a.job || '').toLowerCase();
+                let jobB = (b.job || '').toLowerCase();
                 if (jobA < jobB) return jobSortAsc ? -1 : 1;
                 if (jobA > jobB) return jobSortAsc ? 1 : -1;
                 return 0;
@@ -888,7 +904,7 @@
             globalParties.forEach(p => {
                 textToCopy += `[ ปาร์ตี้ที่ ${p.id} (${p.members.length}/5 คน) ]\n`;
                 p.members.forEach(m => {
-                    textToCopy += `- ${m.ign} (${m.job} / ${m.role} / Lv.${m.level})\n`;
+                    textToCopy += `- ${m.ign || '-'} (${m.job || '-'} / ${m.role || '-'} / Lv.${m.level || 1})\n`;
                 });
                 textToCopy += `\n`;
             });
@@ -1067,18 +1083,21 @@
                 
                 let comp = { Tank: 0, Healer: 0, DPS: 0, Support: 0 };
                 p.members.forEach(m => {
-                    if (comp[m.role] !== undefined) comp[m.role]++;
+                    const role = m.role || 'DPS';
+                    if (comp[role] !== undefined) comp[role]++;
                     else comp.DPS++;
                 });
 
                 let memberListHTML = '';
                 p.members.forEach(m => {
+                    const job = m.job || 'Other';
+                    const role = m.role || 'DPS';
                     memberListHTML += `
                         <div class="flex justify-between items-center text-xs py-1 border-b border-white/5 last:border-none">
-                            <span class="${getJobTextColor(m.job)}">${m.ign} <span class="text-slate-400 font-normal">(${m.job})</span></span>
+                            <span class="${getJobTextColor(job)}">${m.ign || 'Unknown'} <span class="text-slate-400 font-normal">(${job})</span></span>
                             <div class="flex items-center gap-2">
-                                <span class="px-2 py-0.5 rounded-full ${getRoleBadge(m.role)}">${m.role}</span>
-                                <span class="text-slate-400">Lv.${m.level}</span>
+                                <span class="px-2 py-0.5 rounded-full ${getRoleBadge(role)}">${role}</span>
+                                <span class="text-slate-400">Lv.${m.level || 1}</span>
                             </div>
                         </div>
                     `;
@@ -1134,14 +1153,14 @@
             if (globalParties.length === 0) {
                 partiesHTML = `<div class="text-xs text-slate-400 py-8 text-center bg-slate-950/40 rounded-2xl border border-white/5">ยังไม่มีข้อมูลปาร์ตี้หลักสำหรับการจัดกิจกรรม</div>`;
             } else {
-                let availableSubstitutes = members.filter(m => m.activities && m.activities.includes(act.key));
+                let availableSubstitutes = members.filter(m => Array.isArray(m.activities) && m.activities.includes(act.key));
                 let assignedSubstitutesSet = new Set();
 
                 globalParties.forEach(party => {
                     let finalPartyMembers = [];
                     
                     party.members.forEach(m => {
-                        const isParticipating = m.activities && m.activities.includes(act.key);
+                        const isParticipating = Array.isArray(m.activities) && m.activities.includes(act.key);
                         if (isParticipating) {
                             finalPartyMembers.push({ ...m, isSub: false });
                             totalParticipatingCount++;
@@ -1163,36 +1182,38 @@
 
                     let membersHTML = '';
                     finalPartyMembers.forEach(m => {
+                        const job = m.job || 'Other';
+                        const role = m.role || 'DPS';
                         if (m.notActive) {
                             membersHTML += `
                                 <div class="flex justify-between items-center text-xs py-1.5 border-b border-white/5 last:border-none opacity-40">
-                                    <span class="${getJobTextColor(m.job)}">${m.ign} <span class="text-slate-400 font-normal">(${m.job})</span> <span class="text-[10px] text-rose-400 font-normal">(ไม่ได้ลงกิจกรรมนี้)</span></span>
+                                    <span class="${getJobTextColor(job)}">${m.ign || 'Unknown'} <span class="text-slate-400 font-normal">(${job})</span> <span class="text-[10px] text-rose-400 font-normal">(ไม่ได้ลงกิจกรรมนี้)</span></span>
                                     <div class="flex items-center gap-2">
-                                        <span class="px-2 py-0.5 rounded-full ${getRoleBadge(m.role)}">${m.role}</span>
-                                        <span class="text-slate-400">Lv.${m.level}</span>
+                                        <span class="px-2 py-0.5 rounded-full ${getRoleBadge(role)}">${role}</span>
+                                        <span class="text-slate-400">Lv.${m.level || 1}</span>
                                     </div>
                                 </div>
                             `;
                         } else if (m.isSub) {
                             membersHTML += `
                                 <div class="flex justify-between items-center text-xs py-1.5 border-b border-white/5 last:border-none bg-cyan-950/30 px-2 rounded-lg my-0.5 border border-cyan-500/20">
-                                    <span class="${getJobTextColor(m.job)}">
-                                        ${m.ign} <span class="text-slate-400 font-normal">(${m.job})</span> 
+                                    <span class="${getJobTextColor(job)}">
+                                        ${m.ign || 'Unknown'} <span class="text-slate-400 font-normal">(${job})</span> 
                                         <span class="text-[10px] bg-cyan-500/20 text-cyan-300 px-1.5 py-0.5 rounded font-bold ml-1">🔄 (ตัวสำรอง แทน ${m.originalName})</span>
                                     </span>
                                     <div class="flex items-center gap-2">
-                                        <span class="px-2 py-0.5 rounded-full ${getRoleBadge(m.role)}">${m.role}</span>
-                                        <span class="text-slate-400">Lv.${m.level}</span>
+                                        <span class="px-2 py-0.5 rounded-full ${getRoleBadge(role)}">${role}</span>
+                                        <span class="text-slate-400">Lv.${m.level || 1}</span>
                                     </div>
                                 </div>
                             `;
                         } else {
                             membersHTML += `
                                 <div class="flex justify-between items-center text-xs py-1.5 border-b border-white/5 last:border-none">
-                                    <span class="${getJobTextColor(m.job)}">${m.ign} <span class="text-slate-400 font-normal">(${m.job})</span></span>
+                                    <span class="${getJobTextColor(job)}">${m.ign || 'Unknown'} <span class="text-slate-400 font-normal">(${job})</span></span>
                                     <div class="flex items-center gap-2">
-                                        <span class="px-2 py-0.5 rounded-full ${getRoleBadge(m.role)}">${m.role}</span>
-                                        <span class="text-slate-400">Lv.${m.level}</span>
+                                        <span class="px-2 py-0.5 rounded-full ${getRoleBadge(role)}">${role}</span>
+                                        <span class="text-slate-400">Lv.${m.level || 1}</span>
                                     </div>
                                 </div>
                             `;
@@ -1263,10 +1284,12 @@
                 memberTableBody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400 text-sm">ยังไม่มีข้อมูล (No data)</td></tr>`;
             } else {
                 members.forEach((m) => {
-                    const jobColorClass = getJobTextColor(m.job);
+                    const job = m.job || 'Other';
+                    const role = m.role || 'DPS';
+                    const jobColorClass = getJobTextColor(job);
                     
                     let actBadges = '';
-                    if (m.activities && m.activities.length > 0) {
+                    if (Array.isArray(m.activities) && m.activities.length > 0) {
                         m.activities.forEach(act => {
                             let shortName = act;
                             if(act === 'Siege War') shortName = 'Siege War';
@@ -1281,14 +1304,14 @@
                     const row = document.createElement('tr');
                     row.className = 'hover:bg-slate-800/40 transition';
                     row.innerHTML = `
-                        <td class="p-3.5 text-sm ${jobColorClass}">${m.ign}</td>
-                        <td class="p-3.5 text-sm ${jobColorClass}">${m.job}</td>
-                        <td class="p-3.5"><span class="px-2.5 py-1 rounded-full text-xs font-semibold ${getRoleBadge(m.role)}">${m.role}</span></td>
-                        <td class="p-3.5 text-center font-accent text-slate-200 text-sm">${m.level}</td>
-                        <td class="p-3.5 text-center text-slate-300 text-sm">${m.timeSlot}</td>
+                        <td class="p-3.5 text-sm ${jobColorClass}">${m.ign || 'Unknown'}</td>
+                        <td class="p-3.5 text-sm ${jobColorClass}">${job}</td>
+                        <td class="p-3.5"><span class="px-2.5 py-1 rounded-full text-xs font-semibold ${getRoleBadge(role)}">${role}</span></td>
+                        <td class="p-3.5 text-center font-accent text-slate-200 text-sm">${m.level || 1}</td>
+                        <td class="p-3.5 text-center text-slate-300 text-sm">${m.timeSlot || '-'}</td>
                         <td class="p-3.5"><div class="flex flex-wrap max-w-xs">${actBadges}</div></td>
                         <td class="p-3.5 text-center">
-                            <button onclick="deleteMember('${m.ign}')" class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-400 border border-rose-500/30 text-xs font-accent transition flex items-center gap-1 mx-auto">
+                            <button onclick="deleteMember('${m.ign || ''}')" class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-400 border border-rose-500/30 text-xs font-accent transition flex items-center gap-1 mx-auto">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 ลบ
                             </button>
