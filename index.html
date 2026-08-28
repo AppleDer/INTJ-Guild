@@ -431,7 +431,6 @@
                 newRow.dataset.job = item.jobClass;
                 newRow.dataset.search = (item.type + ' ' + item.leader + ' ' + item.characterName + ' ' + item.jobClass).toLowerCase();
 
-                // ปลอดภัยในการส่งพารามิเตอร์ชื่อที่มีเครื่องหมายคำพูด
                 let safeCharName = item.characterName.replace(/'/g, "\\'");
                 let safeLeader = item.leader.replace(/'/g, "\\'");
                 let safeType = item.type.replace(/'/g, "\\'");
@@ -443,7 +442,7 @@
                     <td class="p-4 font-bold ${style.nameColor} tracking-wide">${item.characterName}</td>
                     <td class="p-4"><span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold ${style.badgeClass} border">${item.jobClass}</span></td>
                     <td class="p-4 text-center space-x-1">
-                        <button type="button" onclick="openEditModal('${safeOldCharName = safeCharName}', '${safeType}', '${safeLeader}', '${safeCharName}', '${safeJob}')" class="px-2.5 py-1.5 bg-amber-500/10 hover:bg-amber-500/25 text-amber-300 rounded-lg border border-amber-500/30 text-xs transition" title="แก้ไข">✏️</button>
+                        <button type="button" onclick="openEditModal('${safeCharName}', '${safeType}', '${safeLeader}', '${safeCharName}', '${safeJob}')" class="px-2.5 py-1.5 bg-amber-500/10 hover:bg-amber-500/25 text-amber-300 rounded-lg border border-amber-500/30 text-xs transition" title="แก้ไข">✏️</button>
                         <button type="button" onclick="deleteRecord('${safeCharName}')" class="px-2.5 py-1.5 bg-rose-500/10 hover:bg-rose-500/25 text-rose-400 rounded-lg border border-rose-500/30 text-xs transition" title="ลบ">🗑️</button>
                     </td>
                 `;
