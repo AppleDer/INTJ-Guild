@@ -221,14 +221,15 @@
             <!-- 🎯 Job Filter Buttons -->
             <div class="flex flex-wrap gap-2 pt-1">
                 <button type="button" onclick="filterByJob('all')" id="filterAll" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-amber-600 text-stone-950 transition shadow">ทั้งหมด</button>
+                <button type="button" onclick="filterByJob('พาราดิน')" id="filterPaladin" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#12100d] text-stone-400 border border-amber-900/40 hover:text-white transition">🛡️ พาราดิน</button>
                 <button type="button" onclick="filterByJob('ไนท์')" id="filterKnight" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#12100d] text-stone-400 border border-amber-900/40 hover:text-white transition">⚔️ ไนท์</button>
-                <button type="button" onclick="filterByJob('พาลาดิน')" id="filterPaladin" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#12100d] text-stone-400 border border-amber-900/40 hover:text-white transition">🛡️ พาลาดิน</button>
                 <button type="button" onclick="filterByJob('แอสซาซิน')" id="filterAssassin" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#12100d] text-stone-400 border border-amber-900/40 hover:text-white transition">🗡️ แอสฯ</button>
                 <button type="button" onclick="filterByJob('พรีส')" id="filterPriest" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#12100d] text-stone-400 border border-amber-900/40 hover:text-white transition">✨ พรีส</button>
                 <button type="button" onclick="filterByJob('มั้งค์')" id="filterMonk" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#12100d] text-stone-400 border border-amber-900/40 hover:text-white transition">👊 มั้งค์</button>
+                <button type="button" onclick="filterByJob('ดรูอิด')" id="filterDruid" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#12100d] text-stone-400 border border-amber-900/40 hover:text-white transition">🌿 ดรูอิด</button>
                 <button type="button" onclick="filterByJob('วิซาร์ด')" id="filterWizard" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#12100d] text-stone-400 border border-amber-900/40 hover:text-white transition">🔮 วิซาร์ด</button>
                 <button type="button" onclick="filterByJob('ฮันเตอร์')" id="filterHunter" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#12100d] text-stone-400 border border-amber-900/40 hover:text-white transition">🏹 ฮันเตอร์</button>
-                <button type="button" onclick="filterByJob('สมิธ')" id="filterSmith" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#12100d] text-stone-400 border border-amber-900/40 hover:text-white transition">🔨 สมิธ</button>
+                <button type="button" onclick="filterByJob('แบล็กสมิธ')" id="filterSmith" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#12100d] text-stone-400 border border-amber-900/40 hover:text-white transition">🔨 สมิธ</button>
                 <button type="button" onclick="filterByJob('กันสลิงเกอร์')" id="filterGunslinger" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#12100d] text-stone-400 border border-amber-900/40 hover:text-white transition">🔫 กันสลิงเกอร์</button>
             </div>
 
@@ -318,26 +319,26 @@
         });
 
         function getJobBadgeStyle(jobText) {
-            if (jobText.includes('ไนท์')) {
-                return { badgeClass: 'bg-red-500/10 text-red-400 border-red-500/30', nameColor: 'text-red-400 drop-shadow-[0_0_8px_rgba(248,113,113,0.3)]' };
-            } else if (jobText.includes('พาลาดิน')) {
-                return { badgeClass: 'bg-amber-500/10 text-amber-300 border-amber-500/30', nameColor: 'text-amber-300 drop-shadow-[0_0_8px_rgba(251,191,36,0.3)]' };
+            if (jobText.includes('พาราดิน')) {
+                return { badgeClass: 'bg-red-950/40 text-red-700 border-red-800/40', nameColor: 'text-red-700 drop-shadow-[0_0_8px_rgba(139,0,0,0.3)]' }; // พาราดิน - สีแดงเข้ม
+            } else if (jobText.includes('ไนท์')) {
+                return { badgeClass: 'bg-red-500/10 text-red-500 border-red-500/30', nameColor: 'text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.3)]' }; // ไนท์ - สีแดงปกติ
             } else if (jobText.includes('แอสซาซิน')) {
-                return { badgeClass: 'bg-purple-500/10 text-purple-400 border-purple-500/30', nameColor: 'text-purple-400 drop-shadow-[0_0_8px_rgba(192,132,252,0.3)]' };
+                return { badgeClass: 'bg-purple-500/10 text-purple-400 border-purple-500/30', nameColor: 'text-purple-400 drop-shadow-[0_0_8px_rgba(192,132,252,0.3)]' }; // แอสซาซิน - สีม่วง
             } else if (jobText.includes('พรีส')) {
-                return { badgeClass: 'bg-sky-500/10 text-sky-300 border-sky-500/30', nameColor: 'text-sky-300 drop-shadow-[0_0_8px_rgba(56,189,248,0.3)]' };
+                return { badgeClass: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30', nameColor: 'text-emerald-300 drop-shadow-[0_0_8px_rgba(110,231,183,0.3)]' }; // พรีส - สีเขียวอ่อน
             } else if (jobText.includes('มั้งค์')) {
-                return { badgeClass: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30', nameColor: 'text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.3)]' };
+                return { badgeClass: 'bg-emerald-950/50 text-emerald-700 border-emerald-800/40', nameColor: 'text-emerald-700 drop-shadow-[0_0_8px_rgba(4,120,87,0.3)]' }; // monk - สีเขียวเข้ม
             } else if (jobText.includes('ดรูอิด')) {
-                return { badgeClass: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30', nameColor: 'text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.3)]' };
+                return { badgeClass: 'bg-teal-500/10 text-teal-400 border-teal-500/30', nameColor: 'text-teal-400 drop-shadow-[0_0_8px_rgba(45,212,191,0.3)]' }; // ดรูอิท - สีฟ้าอมเขียว
             } else if (jobText.includes('วิซาร์ด')) {
-                return { badgeClass: 'bg-blue-500/10 text-blue-400 border-blue-500/30', nameColor: 'text-blue-400 drop-shadow-[0_0_8px_rgba(96,165,250,0.3)]' };
+                return { badgeClass: 'bg-blue-500/10 text-blue-400 border-blue-500/30', nameColor: 'text-blue-400 drop-shadow-[0_0_8px_rgba(96,165,250,0.3)]' }; // วิซาร์ด - สีน้ำเงิน
             } else if (jobText.includes('ฮันเตอร์')) {
-                return { badgeClass: 'bg-green-500/10 text-green-400 border-green-500/30', nameColor: 'text-green-400 drop-shadow-[0_0_8px_rgba(74,222,128,0.3)]' };
+                return { badgeClass: 'bg-yellow-500/10 text-yellow-300 border-yellow-500/30', nameColor: 'text-yellow-300 drop-shadow-[0_0_8px_rgba(253,224,71,0.3)]' }; // ฮันเตอร์ - สีเหลือง
             } else if (jobText.includes('แบล็กสมิธ')) {
-                return { badgeClass: 'bg-orange-500/10 text-orange-400 border-orange-500/30', nameColor: 'text-orange-400 drop-shadow-[0_0_8px_rgba(251,146,60,0.3)]' };
+                return { badgeClass: 'bg-orange-500/10 text-orange-400 border-orange-500/30', nameColor: 'text-orange-400 drop-shadow-[0_0_8px_rgba(251,146,60,0.3)]' }; // แบล็กสมิธ - สีส้ม
             } else if (jobText.includes('กันสลิงเกอร์')) {
-                return { badgeClass: 'bg-yellow-600/10 text-yellow-500 border-yellow-600/30', nameColor: 'text-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.3)]' };
+                return { badgeClass: 'bg-amber-900/20 text-amber-700 border-amber-900/40', nameColor: 'text-amber-700 drop-shadow-[0_0_8px_rgba(139,69,19,0.3)]' }; // กันสลิงเกอร์ - สีน้ำตาล
             }
             return { badgeClass: 'bg-stone-500/10 text-stone-300 border-stone-500/30', nameColor: 'text-stone-200' };
         }
@@ -687,9 +688,9 @@
 
         function filterByJob(jobKey) {
             currentJobFilter = jobKey;
-            const buttons = ['all', 'Knight', 'Paladin', 'Assassin', 'Priest', 'Monk', 'Wizard', 'Hunter', 'Smith', 'Gunslinger'];
+            const buttons = ['all', 'Paladin', 'Knight', 'Assassin', 'Priest', 'Monk', 'Druid', 'Wizard', 'Hunter', 'Smith', 'Gunslinger'];
             buttons.forEach(btn => {
-                const el = document.getElementById('filter' + btn.charAt(0).toUpperCase() + btn.slice(1));
+                const el = document.getElementById('filter' + btn);
                 if (el) {
                     if (btn.toLowerCase() === jobKey.toLowerCase() || (jobKey === 'all' && btn === 'all')) {
                         el.className = "px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-amber-600 text-stone-950 transition shadow";
