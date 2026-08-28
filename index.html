@@ -120,6 +120,7 @@
                                 <option value="วิซาร์ด / ไฮวิซาร์ด (Wizard / High Wizard)">🔮 วิซาร์ด / ไฮวิซาร์ด (Wizard / High Wizard)</option>
                                 <option value="ฮันเตอร์ / สไนเปอร์ (Hunter / Sniper)">🏹 ฮันเตอร์ / สไนเปอร์ (Hunter / Sniper)</option>
                                 <option value="แบล็กสมิธ / ไวท์สมิธ (Blacksmith / Whitesmith)">🔨 แบล็กสมิธ / ไวท์สมิธ (Blacksmith / Whitesmith)</option>
+                                <option value="กันสลิงเกอร์ (Gunslinger)">🔫 กันสลิงเกอร์ (Gunslinger)</option>
                             </select>
                         </div>
                     </div>
@@ -169,6 +170,7 @@
                                     <option value="วิซาร์ด / ไฮวิซาร์ด (Wizard / High Wizard)">🔮 วิซาร์ด / ไฮวิซาร์ด (Wizard / High Wizard)</option>
                                     <option value="ฮันเตอร์ / สไนเปอร์ (Hunter / Sniper)">🏹 ฮันเตอร์ / สไนเปอร์ (Hunter / Sniper)</option>
                                     <option value="แบล็กสมิธ / ไวท์สมิธ (Blacksmith / Whitesmith)">🔨 แบล็กสมิธ / ไวท์สมิธ (Blacksmith / Whitesmith)</option>
+                                    <option value="กันสลิงเกอร์ (Gunslinger)">🔫 กันสลิงเกอร์ (Gunslinger)</option>
                                 </select>
                             </div>
                             <div class="w-full md:w-1/12 text-right">
@@ -214,6 +216,7 @@
                 <button type="button" onclick="filterByJob('วิซาร์ด')" id="filterWizard" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#12100d] text-stone-400 border border-amber-900/40 hover:text-white transition">🔮 วิซาร์ด</button>
                 <button type="button" onclick="filterByJob('ฮันเตอร์')" id="filterHunter" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#12100d] text-stone-400 border border-amber-900/40 hover:text-white transition">🏹 ฮันเตอร์</button>
                 <button type="button" onclick="filterByJob('สมิธ')" id="filterSmith" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#12100d] text-stone-400 border border-amber-900/40 hover:text-white transition">🔨 สมิธ</button>
+                <button type="button" onclick="filterByJob('กันสลิงเกอร์')" id="filterGunslinger" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#12100d] text-stone-400 border border-amber-900/40 hover:text-white transition">🔫 กันสลิงเกอร์</button>
             </div>
 
             <div class="overflow-x-auto rounded-2xl border border-amber-900/40">
@@ -263,6 +266,8 @@
                 return { badgeClass: 'bg-green-500/10 text-green-400 border-green-500/30', nameColor: 'text-green-400 drop-shadow-[0_0_8px_rgba(74,222,128,0.3)]' };
             } else if (jobText.includes('แบล็กสมิธ')) {
                 return { badgeClass: 'bg-orange-500/10 text-orange-400 border-orange-500/30', nameColor: 'text-orange-400 drop-shadow-[0_0_8px_rgba(251,146,60,0.3)]' };
+            } else if (jobText.includes('กันสลิงเกอร์')) {
+                return { badgeClass: 'bg-yellow-600/10 text-yellow-500 border-yellow-600/30', nameColor: 'text-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.3)]' };
             }
             return { badgeClass: 'bg-stone-500/10 text-stone-300 border-stone-500/30', nameColor: 'text-stone-200' };
         }
@@ -313,6 +318,7 @@
                         <option value="วิซาร์ด / ไฮวิซาร์ด (Wizard / High Wizard)">🔮 วิซาร์ด / ไฮวิซาร์ด (Wizard / High Wizard)</option>
                         <option value="ฮันเตอร์ / สไนเปอร์ (Hunter / Sniper)">🏹 ฮันเตอร์ / สไนเปอร์ (Hunter / Sniper)</option>
                         <option value="แบล็กสมิธ / ไวท์สมิธ (Blacksmith / Whitesmith)">🔨 แบล็กสมิธ / ไวท์สมิธ (Blacksmith / Whitesmith)</option>
+                        <option value="กันสลิงเกอร์ (Gunslinger)">🔫 กันสลิงเกอร์ (Gunslinger)</option>
                     </select>
                 </div>
                 <div class="w-full md:w-1/12 text-right">
@@ -355,7 +361,6 @@
                 return;
             }
 
-            // แสดงข้อมูลล่าสุดไว้ด้านบนสุด
             const reversedData = [...data].reverse();
 
             reversedData.forEach(item => {
@@ -402,7 +407,6 @@
             let charNameText = document.getElementById('soloCharName').value.trim();
             let jobText = document.getElementById('soloJobClass').value;
 
-            // ตรวจสอบชื่อซ้ำฝั่งหน้าบ้านเบื้องต้น
             if (globalData.some(i => i.characterName.toLowerCase() === charNameText.toLowerCase())) {
                 alert(`ชื่อตัวละคร "${charNameText}" มีอยู่ในระบบแล้ว กรุณาใช้ชื่ออื่น`);
                 btn.disabled = false;
@@ -427,7 +431,7 @@
                 if (result.result === 'success') {
                     alert('ลงทะเบียนเดี่ยวสำเร็จ!');
                     document.getElementById('soloForm').reset();
-                    fetchGuildData(); // ดึงข้อมูลใหม่จาก Google Sheets
+                    fetchGuildData();
                 } else {
                     alert('เกิดข้อผิดพลาด: ' + (result.message || 'ไม่สามารถบันทึกได้'));
                 }
@@ -454,7 +458,6 @@
                 namesToCheck.push(row.querySelector('.member-name').value.trim());
             });
 
-            // ตรวจสอบชื่อซ้ำในระบบ
             for (let name of namesToCheck) {
                 if (globalData.some(i => i.characterName.toLowerCase() === name.toLowerCase())) {
                     alert(`ชื่อตัวละคร "${name}" มีอยู่ในระบบแล้ว ไม่สามารถลงทะเบียนซ้ำได้`);
@@ -505,6 +508,7 @@
                                 <option value="วิซาร์ด / ไฮวิซาร์ด (Wizard / High Wizard)">🔮 วิซาร์ด / ไฮวิซาร์ด (Wizard / High Wizard)</option>
                                 <option value="ฮันเตอร์ / สไนเปอร์ (Hunter / Sniper)">🏹 ฮันเตอร์ / สไนเปอร์ (Hunter / Sniper)</option>
                                 <option value="แบล็กสมิธ / ไวท์สมิธ (Blacksmith / Whitesmith)">🔨 แบล็กสมิธ / ไวท์สมิธ (Blacksmith / Whitesmith)</option>
+                                <option value="กันสลิงเกอร์ (Gunslinger)">🔫 กันสลิงเกอร์ (Gunslinger)</option>
                             </select>
                         </div>
                         <div class="w-full md:w-1/12 text-right">
@@ -525,7 +529,7 @@
 
         function filterByJob(jobKey) {
             currentJobFilter = jobKey;
-            const buttons = ['all', 'Knight', 'Paladin', 'Assassin', 'Priest', 'Wizard', 'Hunter', 'Smith'];
+            const buttons = ['all', 'Knight', 'Paladin', 'Assassin', 'Priest', 'Wizard', 'Hunter', 'Smith', 'Gunslinger'];
             buttons.forEach(btn => {
                 const el = document.getElementById('filter' + btn.charAt(0).toUpperCase() + btn.slice(1));
                 if (el) {
