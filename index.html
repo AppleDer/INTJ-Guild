@@ -26,11 +26,13 @@
 </head>
 <body class="bg-[#050403] text-stone-100 min-h-screen selection:bg-amber-600 selection:text-white relative overflow-x-hidden">
 
+    <!-- พื้นหลังแสงเรืองแสงตกแต่ง -->
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1400px] h-[500px] bg-gradient-to-tr from-amber-950/20 via-yellow-950/10 to-transparent blur-[150px] pointer-events-none -z-10"></div>
     <div class="absolute bottom-10 right-10 w-[600px] h-[600px] bg-stone-900/20 rounded-full blur-[180px] pointer-events-none -z-10"></div>
 
     <div class="max-w-5xl mx-auto px-4 py-8 md:py-12 space-y-8">
         
+        <!-- 🌟 Header Section -->
         <header class="glass-panel rounded-3xl p-6 md:p-10 relative overflow-hidden text-center space-y-6 glow-gold">
             <div class="absolute top-0 right-0 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
             <div class="absolute bottom-0 left-0 w-80 h-80 bg-yellow-600/5 rounded-full blur-3xl pointer-events-none"></div>
@@ -44,6 +46,7 @@
                 </p>
             </div>
 
+            <!-- สถิติกิลด์ -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2">
                 <div class="bg-[#12100d]/80 p-4 rounded-2xl border border-amber-900/40 backdrop-blur">
                     <span class="text-[11px] font-semibold text-amber-300/70 uppercase tracking-wider block mb-1">ทั้งหมด (Total)</span>
@@ -68,6 +71,7 @@
                 </div>
             </div>
 
+            <!-- หลอดแสดงความจุโควต้า (Progress Bar) -->
             <div class="space-y-2 pt-2 border-t border-amber-900/30">
                 <div class="flex justify-between text-xs text-stone-400 px-1">
                     <span>ความจุโควต้ากิลด์ (Guild Capacity)</span>
@@ -79,6 +83,7 @@
             </div>
         </header>
 
+        <!-- 📂 Tab Switcher -->
         <div class="flex justify-center">
             <div class="glass-panel p-1.5 rounded-2xl flex space-x-2 shadow-2xl border border-amber-900/40">
                 <button type="button" onclick="switchTab('solo')" id="btnSolo" class="px-6 py-3 rounded-xl font-semibold text-xs md:text-sm transition-all duration-300 bg-gradient-to-r from-amber-700 to-yellow-700 text-white shadow-lg shadow-amber-950/40 flex items-center gap-2">
@@ -90,8 +95,10 @@
             </div>
         </div>
 
+        <!-- 📝 Forms Container -->
         <div class="space-y-6">
             
+            <!-- Solo Form -->
             <section id="formSolo" class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl transition-all duration-300 border border-amber-900/30">
                 <div class="flex items-center gap-4 mb-6 pb-4 border-b border-amber-900/40">
                     <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-xl text-amber-300 shadow-inner">
@@ -131,6 +138,7 @@
                 </form>
             </section>
 
+            <!-- Party Form -->
             <section id="formParty" class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl transition-all duration-300 hidden border border-amber-900/30">
                 <div class="flex items-center gap-4 mb-6 pb-4 border-b border-amber-900/40">
                     <div class="w-12 h-12 rounded-2xl bg-yellow-500/10 border border-yellow-500/30 flex items-center justify-center text-xl text-yellow-300 shadow-inner">
@@ -190,6 +198,7 @@
             </section>
         </div>
 
+        <!-- 📊 Roster Table Section -->
         <section class="glass-panel rounded-3xl p-6 md:p-8 shadow-2xl space-y-6 border border-amber-900/30">
             <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-amber-900/40 pb-5">
                 <div>
@@ -209,6 +218,7 @@
                 </div>
             </div>
 
+            <!-- 🎯 Job Filter Buttons -->
             <div class="flex flex-wrap gap-2 pt-1">
                 <button type="button" onclick="filterByJob('all')" id="filterAll" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-amber-600 text-stone-950 transition shadow">ทั้งหมด</button>
                 <button type="button" onclick="filterByJob('ไนท์')" id="filterKnight" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#12100d] text-stone-400 border border-amber-900/40 hover:text-white transition">⚔️ ไนท์</button>
@@ -244,6 +254,7 @@
 
     </div>
 
+    <!-- 🛠️ Edit Modal Popup -->
     <div id="editModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 space-y-6 border border-amber-500/40 shadow-2xl">
             <div class="flex justify-between items-center border-b border-amber-900/40 pb-4">
@@ -296,8 +307,9 @@
         </div>
     </div>
 
+    <!-- JavaScript -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-prhk_f-vUW9wMT295cHpL-adRhvCoUOP1sIX73OP5uJxdJzhcs-N4OlgO6O6QNwP/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyebqpTPF1W7CLcPbRP2DCJB-lYWAFu5rZY3Jc2QShiPHXdrYpWZwhqAGdL_4QXPh_o/exec";
         let currentJobFilter = 'all';
         let globalData = [];
 
